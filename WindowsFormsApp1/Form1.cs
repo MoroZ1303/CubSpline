@@ -16,7 +16,7 @@ namespace WindowsFormsApp1
         public Form1()
         {
             inputDataForm = new Input_data_form();
-            polynomial = new Polynomial();
+            polynomial = new EnterPolynomialForm();
             InitializeComponent();
         }
 

@@ -4,7 +4,7 @@
     {
         
         private Input_data_form inputDataForm;
-        private Polynomial polynomial;
+        private EnterPolynomialForm polynomial;
         private string pName ;
         /// <summary>
         /// Обязательная переменная конструктора.

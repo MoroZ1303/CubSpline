@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApp1
 {
-    partial class Polynomial
+    partial class EnterPolynomialForm
     {
         /// <summary>
         /// Required designer variable.

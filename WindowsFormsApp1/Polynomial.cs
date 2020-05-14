@@ -11,10 +11,11 @@ using System.Windows.Forms;
 namespace WindowsFormsApp1
 {
     
-    public partial class Polynomial : Form
+    public partial class EnterPolynomialForm : Form
     {
+ 
 
-        public Polynomial()
+        public EnterPolynomialForm()
         {
             InitializeComponent();
         }
@@ -45,7 +46,8 @@ namespace WindowsFormsApp1
 
         private void Polinome_Load(object sender, EventArgs e)
         {
-
+            this.dataGridView1.CellValidating += new DataGridViewCellValidatingEventHandler(dataGridView1_CellValidating);
+            this.dataGridView1.CellEndEdit += new DataGridViewCellEventHandler(dataGridView1_CellEndEdit);
         }
 
         private void ok_Click(object sender, EventArgs e)
@@ -55,7 +57,49 @@ namespace WindowsFormsApp1
 
         private void cancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
+            this.DialogResult = DialogResult.Cancel; 
         }
+
+        private void dataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            string headerText = dataGridView1.Columns[e.ColumnIndex].HeaderText;
+            
+            // Confirm that the cell is not empty.
+            if (string.IsNullOrEmpty(e.FormattedValue.ToString()))
+            {
+                dataGridView1.Rows[e.RowIndex].ErrorText =headerText +
+                    " must not be empty";
+                e.Cancel = true;
+                return;
+            }
+
+            int pwr = 0; 
+            if (e.ColumnIndex == 0 && (!Int32.TryParse(e.FormattedValue.ToString(),out pwr) || pwr<0) )
+            {
+                dataGridView1.Rows[e.RowIndex].ErrorText = headerText +
+                    " must be positive integer";
+                e.Cancel = true;
+                return;
+            }
+
+            double coef = 0;
+            if (e.ColumnIndex == 1 && !Double.TryParse(e.FormattedValue.ToString(), out coef) )
+            {
+                dataGridView1.Rows[e.RowIndex].ErrorText = headerText +
+                    " must be floating point";
+                e.Cancel = true;
+                return;
+            }
+
+            e.Cancel = false;
+
+        }
+        void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            // Clear the row error in case the user presses ESC.
+            dataGridView1.Rows[e.RowIndex].ErrorText = String.Empty;
+        }
+
+
     }
 }
