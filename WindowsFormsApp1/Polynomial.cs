@@ -127,7 +127,7 @@ namespace WindowsFormsApp1
         {
             ValidateRange();
         }
-        //FIXME: check for duplicated power
+
         private void okButton_Click(object sender, EventArgs e)
         {
             string[] headerText = new string[] { dataGridView1.Columns[0].HeaderText, dataGridView1.Columns[1].HeaderText };
@@ -140,34 +140,51 @@ namespace WindowsFormsApp1
                     dataGridView1.Rows[i].ErrorText = headerText[0] +
                         " must not be empty";
                     ok = false;
+                    continue;
                 }
                 if (string.IsNullOrEmpty(dataGridView1.Rows[i].Cells[1].FormattedValue.ToString()))
                 {
                     dataGridView1.Rows[i].ErrorText = headerText[1] +
                         " must not be empty";
                     ok = false;
+                    continue;
                 }
-
-
+                dataGridView1.Rows[i].ErrorText = String.Empty;
             }
 
             ok = ok && ValidateRange();
 
-            ok = ok && dataGridView1.RowCount > 1;
+            
+            if (dataGridView1.RowCount < 2)
+            {
+                dataGridView1.Rows[0].ErrorText = "Polynomial should contain at least one entry";
+                ok = false;
+            }
 
             if (!ok)
                 return;
 
-            state.Clear();
+            List<Tuple<int, double>> newState = new List<Tuple<int, double>>();
+            HashSet<int> powers = new HashSet<int>();
             for (int i = 0; i < dataGridView1.RowCount - 1; i++)
             {
                 int p = Int32.Parse(dataGridView1.Rows[i].Cells[0].Value.ToString());
                 double c = Double.Parse(dataGridView1.Rows[i].Cells[1].Value.ToString());
-                state.Add(new Tuple<int, double>(p, c));
+                newState.Add(new Tuple<int, double>(p, c));
+                if (powers.Contains(p))
+                {
+                    ok = false;
+                    dataGridView1.Rows[i].ErrorText = "Polynomial should not have duplicate power of X";
+                }
+                else
+                    powers.Add(p);
 
             }
-            range = new Tuple<double, double>(Double.Parse(xRangeBeginInput.Text), Double.Parse(xRangeEndInput.Text));
+            if (!ok)
+                return;
 
+            range = new Tuple<double, double>(Double.Parse(xRangeBeginInput.Text), Double.Parse(xRangeEndInput.Text));
+            state = newState;
             this.DialogResult = DialogResult.OK;
         }
 

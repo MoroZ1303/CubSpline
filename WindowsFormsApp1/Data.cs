@@ -23,8 +23,7 @@ namespace Data
     }
     class Utils
     {
-
-        public List<Point> getPointsFromFile(System.IO.Stream stream)
+        public static List<Point> getPointsFromFile(System.IO.Stream stream)
         {
             List<Point> points = new List<Point>();
             using (StreamReader reader = new StreamReader(stream))
@@ -35,36 +34,12 @@ namespace Data
                 {
                     string[] parts = l.Split(new char[] { ',' });
                     double x = Double.Parse(parts[0]);
-                    double y = Double.Parse(parts[0]);
+                    double y = Double.Parse(parts[1]);
                     points.Add(new Point(x, y));
                 }
             }
 
             return points;
-        }
-
-        public List<Point> buildCubicSpline(List<Point> initialPoints, int totalPoints)
-        {
-
-            Dictionary<double, double> dict = new Dictionary<double, double>();
-            foreach (Point point in initialPoints)
-            {
-                if (dict.ContainsKey(point.getX()))
-                {
-                    throw new Exception();
-                }
-                dict[point.getX()] = point.getY();
-            }
-
-            List<Point> sorted = dict.Select(x => new Point(x.Key, x.Value)).ToList();
-            sorted.Sort((a, b) => a.getX().CompareTo(b.getY()));
-            Point[] points = sorted.ToArray();
-
-            for (int i = 1; i < points.Length; i++)
-            {
-
-            }
-            return null;
         }
     };
     public class Polinomial

@@ -48,11 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Polynomial.cs">
       <SubType>Form</SubType>
@@ -60,19 +60,19 @@
     <Compile Include="Polynomial.Designer.cs">
       <DependentUpon>Polynomial.cs</DependentUpon>
     </Compile>
-    <Compile Include="input_data_form .cs">
+    <Compile Include="PointsInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="input_data_form .Designer.cs">
-      <DependentUpon>input_data_form .cs</DependentUpon>
+    <Compile Include="PointsInputForm.Designer.cs">
+      <DependentUpon>PointsInputForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="input_data_form .resx">
-      <DependentUpon>input_data_form .cs</DependentUpon>
+    <EmbeddedResource Include="PointsInputForm.resx">
+      <DependentUpon>PointsInputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Polynomial.resx">
       <DependentUpon>Polynomial.cs</DependentUpon>
