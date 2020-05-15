@@ -67,10 +67,10 @@ namespace Data
             return null;
         }
     };
-    public class Polinom
+    public class Polinomial
     {
         private double[] coefficients;
-        public Polinom(double[] coefficients)
+        public Polinomial(double[] coefficients)
         {
             this.coefficients = coefficients;
         }
@@ -92,7 +92,11 @@ namespace Data
             double step = (end - start) / numberOfPoints;
             for (int i = 0; i < numberOfPoints; i++)
             {
-                double x = start + i * step;
+                double x;
+                if (i == numberOfPoints - 1)
+                    x = end;
+                else
+                    x = start + i * step;
                 res[i] = new Point(x, f(x));
             }
 
@@ -209,11 +213,11 @@ namespace Data
         private double end;
         private Tuple<double, double>[] ranges;
         private Point[] points;
-        private Polinom[] splines;
+        private Polinomial[] splines;
         public CubicSpline(Point[] inputPoints)
         {
             buildRanges(inputPoints);
-            splines = new Polinom[ranges.Length];
+            splines = new Polinomial[ranges.Length];
             double[] h = new double[points.Length];
             for (int i = 1; i < points.Length; i++)
             {
@@ -252,7 +256,7 @@ namespace Data
                 double a = points[i - 1].getY(); // свободный коэффициент
                 double d = (c[i + 1] - c[i]) / (3 * h[i]); // коэффициент при x^3
                 double b = (points[i].getY() - points[i - 1].getY()) / h[i] - (2 * c[i] + c[i + 1]) * h[i] / 3; // коэффициент при x^1
-                splines[i - 1] = new Polinom(new double[] { a, b, c[i], d });
+                splines[i - 1] = new Polinomial(new double[] { a, b, c[i], d });
             }
         }
 

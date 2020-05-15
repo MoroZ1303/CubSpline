@@ -10,17 +10,18 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    
+
     public partial class EnterPolynomialForm : Form
     {
 
-        List<Tuple<int, double>> state;
+        List<Tuple<int, double>> state = new List<Tuple<int, double>>();
+        Tuple<double, double> range = null;
+
         public EnterPolynomialForm()
         {
-            state = new List<Tuple<int, double>>();
             InitializeComponent();
         }
-        public Data.Polinom getPolynomial()
+        public Data.Polinomial getPolynomial()
         {
             int max = 0;
 
@@ -37,34 +38,59 @@ namespace WindowsFormsApp1
                 double c = i.Item2;
                 cofficients[pow] = c;
             }
-            return new Data.Polinom (cofficients);
+            return new Data.Polinomial(cofficients);
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        public double rangeStart
         {
-
+            get {
+                return range.Item1;
+            }
+        }
+        public double rangeEnd
+        {
+            get
+            {
+                return range.Item2;
+            }
         }
 
-        private void Polinome_Load(object sender, EventArgs e)
+        private void EnterPolynomialForm_Load(object sender, EventArgs e)
         {
-            xRangeBegin.GotFocus += new EventHandler((s, evt) => {
-                xRangeBegin.BackColor = Color.White;
-                xRangeEnd.BackColor = Color.White;
+            xRangeBeginInput.GotFocus += new EventHandler((s, evt) =>
+            {
+                xRangeBeginInput.BackColor = Color.White;
+                xRangeEndInput.BackColor = Color.White;
             });
-            xRangeEnd.GotFocus += new EventHandler((s, evt) => {
-                xRangeBegin.BackColor = Color.White;
-                xRangeEnd.BackColor = Color.White;
+            xRangeEndInput.GotFocus += new EventHandler((s, evt) =>
+            {
+                xRangeBeginInput.BackColor = Color.White;
+                xRangeEndInput.BackColor = Color.White;
             });
-            xRangeBegin.LostFocus += new EventHandler(RangeLostFocus);
-            xRangeEnd.LostFocus += new EventHandler(RangeLostFocus);
+            xRangeBeginInput.LostFocus += new EventHandler(RangeLostFocus);
+            xRangeEndInput.LostFocus += new EventHandler(RangeLostFocus);
             this.dataGridView1.CellValidating += new DataGridViewCellValidatingEventHandler(dataGridView1_CellValidating);
             this.dataGridView1.CellEndEdit += new DataGridViewCellEventHandler(dataGridView1_CellEndEdit);
+            
+            if (range != null)
+            {
+                xRangeBeginInput.Text = range.Item1.ToString();
+                xRangeEndInput.Text = range.Item2.ToString();
+            }
+            else
+            {
+                xRangeBeginInput.Text = "";
+                xRangeEndInput.Text = "";
+            }
+            xRangeBeginInput.BackColor = Color.White;
+            xRangeEndInput.BackColor = Color.White;
+
             dataGridView1.Rows.Clear();
             foreach (Tuple<int, double> item in state)
             {
                 dataGridView1.Rows.Add(new string[] { item.Item1.ToString(), item.Item2.ToString() });
-
             }
+
         }
 
         private bool ValidateRange()
@@ -72,29 +98,29 @@ namespace WindowsFormsApp1
             bool ok = true;
             double start;
             double end;
-            if (!Double.TryParse(xRangeBegin.Text, out start))
+            if (!Double.TryParse(xRangeBeginInput.Text, out start))
             {
-                xRangeBegin.BackColor = Color.Red;
+                xRangeBeginInput.BackColor = Color.Red;
                 ok = false;
             }
-            if (!Double.TryParse(xRangeEnd.Text, out end))
+            if (!Double.TryParse(xRangeEndInput.Text, out end))
             {
-                xRangeEnd.BackColor = Color.Red;
+                xRangeEndInput.BackColor = Color.Red;
                 ok = false;
             }
             if (start >= end)
             {
-                xRangeBegin.BackColor = Color.Red;
-                xRangeEnd.BackColor = Color.Red;
+                xRangeBeginInput.BackColor = Color.Red;
+                xRangeEndInput.BackColor = Color.Red;
                 ok = false;
             }
             if (ok)
             {
-                xRangeBegin.BackColor = Color.White;
-                xRangeEnd.BackColor = Color.White;
+                xRangeBeginInput.BackColor = Color.White;
+                xRangeEndInput.BackColor = Color.White;
             }
             return ok;
-               
+
         }
 
         private void RangeLostFocus(object sender, EventArgs e)
@@ -102,13 +128,13 @@ namespace WindowsFormsApp1
             ValidateRange();
         }
         //FIXME: check for duplicated power
-        private void ok_Click(object sender, EventArgs e)
+        private void okButton_Click(object sender, EventArgs e)
         {
             string[] headerText = new string[] { dataGridView1.Columns[0].HeaderText, dataGridView1.Columns[1].HeaderText };
             bool ok = true;
             for (int i = 0; i < dataGridView1.RowCount - 1; i++)
             {
-                
+
                 if (string.IsNullOrEmpty(dataGridView1.Rows[i].Cells[0].FormattedValue.ToString()))
                 {
                     dataGridView1.Rows[i].ErrorText = headerText[0] +
@@ -121,14 +147,17 @@ namespace WindowsFormsApp1
                         " must not be empty";
                     ok = false;
                 }
-          
+
 
             }
+
             ok = ok && ValidateRange();
+
+            ok = ok && dataGridView1.RowCount > 1;
 
             if (!ok)
                 return;
-            
+
             state.Clear();
             for (int i = 0; i < dataGridView1.RowCount - 1; i++)
             {
@@ -137,51 +166,49 @@ namespace WindowsFormsApp1
                 state.Add(new Tuple<int, double>(p, c));
 
             }
+            range = new Tuple<double, double>(Double.Parse(xRangeBeginInput.Text), Double.Parse(xRangeEndInput.Text));
 
             this.DialogResult = DialogResult.OK;
         }
 
-        private void cancel_Click(object sender, EventArgs e)
+        private void cancelButton_Click(object sender, EventArgs e)
         {
             //if (!ValidateRange())
-              //  return;
-            this.DialogResult = DialogResult.Cancel; 
+            //  return;
+            this.DialogResult = DialogResult.Cancel;
         }
 
         private void dataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            
+
             string headerText = dataGridView1.Columns[e.ColumnIndex].HeaderText;
-            
+
             // Confirm that the cell is not empty.
             if (string.IsNullOrEmpty(e.FormattedValue.ToString()))
             {
-                dataGridView1.Rows[e.RowIndex].ErrorText =headerText +
+                dataGridView1.Rows[e.RowIndex].ErrorText = headerText +
                     " must not be empty";
-                e.Cancel = true;
+                //e.Cancel = true;
                 return;
             }
 
-            int pwr = 0; 
-            if (e.ColumnIndex == 0 && (!Int32.TryParse(e.FormattedValue.ToString(),out pwr) || pwr<0) )
+            int pwr = 0;
+            if (e.ColumnIndex == 0 && (!Int32.TryParse(e.FormattedValue.ToString(), out pwr) || pwr < 0))
             {
                 dataGridView1.Rows[e.RowIndex].ErrorText = headerText +
                     " must be positive integer";
-                e.Cancel = true;
+                //e.Cancel = true;
                 return;
             }
 
             double coef = 0;
-            if (e.ColumnIndex == 1 && !Double.TryParse(e.FormattedValue.ToString(), out coef) )
+            if (e.ColumnIndex == 1 && !Double.TryParse(e.FormattedValue.ToString(), out coef))
             {
                 dataGridView1.Rows[e.RowIndex].ErrorText = headerText +
                     " must be floating point";
-                e.Cancel = true;
+                //e.Cancel = true;
                 return;
             }
-            
-
-           
         }
         void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {

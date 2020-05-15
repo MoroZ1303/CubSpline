@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.poverX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.powerX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cofficient = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ok = new System.Windows.Forms.Button();
-            this.cancel = new System.Windows.Forms.Button();
-            this.xRangeBegin = new System.Windows.Forms.TextBox();
-            this.xRangeEnd = new System.Windows.Forms.TextBox();
+            this.okButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.xRangeBeginInput = new System.Windows.Forms.TextBox();
+            this.xRangeEndInput = new System.Windows.Forms.TextBox();
             this.xRangeBeginLabel = new System.Windows.Forms.Label();
             this.xRangeEndLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -44,18 +44,17 @@
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.poverX,
+            this.powerX,
             this.cofficient});
             this.dataGridView1.Location = new System.Drawing.Point(12, 67);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(244, 381);
             this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // poverX
             // 
-            this.poverX.HeaderText = "power of x ";
-            this.poverX.Name = "poverX";
+            this.powerX.HeaderText = "power of x ";
+            this.powerX.Name = "poverX";
             // 
             // cofficient
             // 
@@ -64,37 +63,37 @@
             // 
             // ok
             // 
-            this.ok.Location = new System.Drawing.Point(15, 470);
-            this.ok.Name = "ok";
-            this.ok.Size = new System.Drawing.Size(108, 40);
-            this.ok.TabIndex = 4;
-            this.ok.Text = "Ok";
-            this.ok.UseVisualStyleBackColor = true;
-            this.ok.Click += new System.EventHandler(this.ok_Click);
+            this.okButton.Location = new System.Drawing.Point(15, 470);
+            this.okButton.Name = "ok";
+            this.okButton.Size = new System.Drawing.Size(108, 40);
+            this.okButton.TabIndex = 4;
+            this.okButton.Text = "Ok";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(145, 470);
-            this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(108, 40);
-            this.cancel.TabIndex = 3;
-            this.cancel.Text = "Cancel";
-            this.cancel.UseVisualStyleBackColor = true;
-            this.cancel.Click += new System.EventHandler(this.cancel_Click);
+            this.cancelButton.Location = new System.Drawing.Point(145, 470);
+            this.cancelButton.Name = "cancel";
+            this.cancelButton.Size = new System.Drawing.Size(108, 40);
+            this.cancelButton.TabIndex = 3;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // xRangeBegin
             // 
-            this.xRangeBegin.Location = new System.Drawing.Point(15, 25);
-            this.xRangeBegin.Name = "xRangeBegin";
-            this.xRangeBegin.Size = new System.Drawing.Size(111, 20);
-            this.xRangeBegin.TabIndex = 5;
+            this.xRangeBeginInput.Location = new System.Drawing.Point(15, 25);
+            this.xRangeBeginInput.Name = "xRangeBegin";
+            this.xRangeBeginInput.Size = new System.Drawing.Size(111, 20);
+            this.xRangeBeginInput.TabIndex = 5;
             // 
             // xRangeEnd
             // 
-            this.xRangeEnd.Location = new System.Drawing.Point(142, 25);
-            this.xRangeEnd.Name = "xRangeEnd";
-            this.xRangeEnd.Size = new System.Drawing.Size(111, 20);
-            this.xRangeEnd.TabIndex = 6;
+            this.xRangeEndInput.Location = new System.Drawing.Point(142, 25);
+            this.xRangeEndInput.Name = "xRangeEnd";
+            this.xRangeEndInput.Size = new System.Drawing.Size(111, 20);
+            this.xRangeEndInput.TabIndex = 6;
             // 
             // xRangeBeginLabel
             // 
@@ -121,14 +120,14 @@
             this.ClientSize = new System.Drawing.Size(263, 522);
             this.Controls.Add(this.xRangeEndLabel);
             this.Controls.Add(this.xRangeBeginLabel);
-            this.Controls.Add(this.xRangeEnd);
-            this.Controls.Add(this.xRangeBegin);
-            this.Controls.Add(this.ok);
-            this.Controls.Add(this.cancel);
+            this.Controls.Add(this.xRangeEndInput);
+            this.Controls.Add(this.xRangeBeginInput);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.dataGridView1);
             this.Name = "Polynomial";
             this.Text = "Polynomial";
-            this.Load += new System.EventHandler(this.Polinome_Load);
+            this.Load += new System.EventHandler(this.EnterPolynomialForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -138,12 +137,12 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn poverX;
+        private System.Windows.Forms.DataGridViewTextBoxColumn powerX;
         private System.Windows.Forms.DataGridViewTextBoxColumn cofficient;
-        private System.Windows.Forms.Button ok;
-        private System.Windows.Forms.Button cancel;
-        private System.Windows.Forms.TextBox xRangeBegin;
-        private System.Windows.Forms.TextBox xRangeEnd;
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.TextBox xRangeBeginInput;
+        private System.Windows.Forms.TextBox xRangeEndInput;
         private System.Windows.Forms.Label xRangeBeginLabel;
         private System.Windows.Forms.Label xRangeEndLabel;
     }

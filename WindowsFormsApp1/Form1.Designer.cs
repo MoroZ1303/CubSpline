@@ -93,9 +93,8 @@
             this.chart1.Size = new System.Drawing.Size(902, 506);
             this.chart1.TabIndex = 6;
             this.chart1.Text = "chart1";
-            this.chart1.Click += new System.EventHandler(this.chart1_Click);
             // 
-            // AddPolinome
+            // EnterPolinomial
             // 
             this.AddPolinome.Location = new System.Drawing.Point(987, 65);
             this.AddPolinome.Name = "AddPolinome";
