@@ -24,6 +24,19 @@ namespace WindowsFormsApp1
 
         }
 
+        private Series updateChartSeries(string name, SeriesChartType type, Data.Point[] points)
+        {
+            Series series = chart1.Series.FindByName(name);
+            if (series != null)
+                chart1.Series.Remove(series);
+            series = chart1.Series.Add(name);
+            series.ChartType = type;
+            foreach (var p in points)
+            {
+                series.Points.AddXY(p.getX(), p.getY());
+            }
+            return series;
+        }
         private void Manual_menu_item_Click(object sender, EventArgs e)
         {
 
@@ -31,28 +44,20 @@ namespace WindowsFormsApp1
             {
                 Data.Point[] points = inputDataForm.GetPoints();
 
-                Series pointsSeries = chart1.Series.FindByName("points");
-                if (pointsSeries != null)
-                    chart1.Series.Remove(pointsSeries);
-                pointsSeries = chart1.Series.Add("points");
-                pointsSeries.ChartType = SeriesChartType.Point;
-                foreach(var p in points)
-                {
-                    pointsSeries.Points.AddXY(p.getX(), p.getY());
-                }
+                updateChartSeries("points", SeriesChartType.Point, points);
 
                 Data.CubicSpline spline = new Data.CubicSpline(points);
-                Series splineSeries = chart1.Series.FindByName("spline");                
-                if (splineSeries != null)
-                    chart1.Series.Remove(splineSeries);
+                Data.Point[] splinePoints = spline.getPoints();
+                updateChartSeries("spline", SeriesChartType.Spline, splinePoints);
 
-                splineSeries = chart1.Series.Add("spline");
-                splineSeries.ChartType = SeriesChartType.Spline;
-                splineSeries.Points.Clear();
-                foreach (var p in spline.getPoints())
-                {
-                    splineSeries.Points.AddXY(p.getX(), p.getY());
-                }
+                Data.FirstDerivative firstDerivative = new Data.FirstDerivative(spline.getPoints());
+                updateChartSeries("f'(x)", SeriesChartType.Spline, firstDerivative.GetPoints());
+                showFirstDerivative.Checked = true;
+
+                Data.SecondDerivative secondDerivative = new Data.SecondDerivative(spline.getPoints());
+                updateChartSeries("f''(x)", SeriesChartType.Spline, secondDerivative.GetPoints());
+                showSecondDerivative.Checked = true;
+
             }
 
 
@@ -83,6 +88,20 @@ namespace WindowsFormsApp1
                 checkBox1.Checked = true;
             }
 
+        }
+
+        private void showFirstDerivative_CheckedChanged(object sender, EventArgs e)
+        {
+            string seriesName = "f'(x)";
+            Series series = chart1.Series.FindByName(seriesName);
+            series.Enabled = showFirstDerivative.Checked;
+        }
+
+        private void showSecondDerivative_CheckedChanged(object sender, EventArgs e)
+        {
+            string seriesName = "f''(x)";
+            Series series = chart1.Series.FindByName(seriesName);
+            series.Enabled = showSecondDerivative.Checked;
         }
     }
 }

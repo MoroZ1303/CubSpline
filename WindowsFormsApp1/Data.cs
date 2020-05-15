@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using WindowsFormsApp1;
 
 namespace Data
 {
@@ -173,6 +174,52 @@ namespace Data
                 x[i] = alpha[i + 1] * x[i + 1] + beta[i + 1];
             }
             return x;
+        }
+    }
+
+    public class FirstDerivative
+    {
+        Point[] points;
+
+        public FirstDerivative(Point[] inputPoints)
+        {
+            // Сортируем точки по х
+            points = inputPoints.OrderBy(p => p.getX()).ToArray();
+        }
+
+        public Point[] GetPoints()
+        {
+            Point[] res = new Point[points.Length - 1];
+            for (int i = 0; i < points.Length - 1; i++)
+            {
+
+                double dx = (points[i + 1].getY() - points[i].getY()) / (points[i + 1].getX() - points[i].getX());
+                res[i] = new Point(points[i].getX(), dx);
+            }
+            return res;
+        }
+    }
+
+    public class SecondDerivative
+    {
+        Point[] points;
+
+        public SecondDerivative(Point[] inputPoints)
+        {
+            // Сортируем точки по х
+            points = inputPoints.OrderBy(p => p.getX()).ToArray();
+        }
+
+        public Point[] GetPoints()
+        {
+            Point[] res = new Point[points.Length - 5];
+            for (int i = 2; i < points.Length - 3; i++)
+            {
+                double t = (points[i + 2].getY() - 2 * points[i].getY() + points[i - 2].getY());
+                double dx2 = t / (points[i + 2].getX() - points[i].getX());
+                res[i-2] = new Point(points[i].getX(), dx2);
+            }
+            return res;
         }
     }
 

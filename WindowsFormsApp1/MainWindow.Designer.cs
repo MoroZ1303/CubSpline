@@ -37,6 +37,8 @@
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.enterPolynomialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showFirstDerivative = new System.Windows.Forms.CheckBox();
+            this.showSecondDerivative = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
@@ -97,11 +99,35 @@
             this.enterPolynomialToolStripMenuItem.Text = "Enter Polynomial";
             this.enterPolynomialToolStripMenuItem.Click += new System.EventHandler(this.enterPolynomialToolStripMenuItem_Click);
             // 
+            // showFirstDerivative
+            // 
+            this.showFirstDerivative.AutoSize = true;
+            this.showFirstDerivative.Location = new System.Drawing.Point(987, 65);
+            this.showFirstDerivative.Name = "showFirstDerivative";
+            this.showFirstDerivative.Size = new System.Drawing.Size(72, 17);
+            this.showFirstDerivative.TabIndex = 10;
+            this.showFirstDerivative.Text = "Show f\'(x)";
+            this.showFirstDerivative.UseVisualStyleBackColor = true;
+            this.showFirstDerivative.CheckedChanged += new System.EventHandler(this.showFirstDerivative_CheckedChanged);
+            // 
+            // showSecondDerivative
+            // 
+            this.showSecondDerivative.AutoSize = true;
+            this.showSecondDerivative.Location = new System.Drawing.Point(987, 88);
+            this.showSecondDerivative.Name = "showSecondDerivative";
+            this.showSecondDerivative.Size = new System.Drawing.Size(74, 17);
+            this.showSecondDerivative.TabIndex = 10;
+            this.showSecondDerivative.Text = "Show f\'\'(x)";
+            this.showSecondDerivative.UseVisualStyleBackColor = true;
+            this.showSecondDerivative.CheckedChanged += new System.EventHandler(this.showSecondDerivative_CheckedChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1219, 601);
+            this.Controls.Add(this.showSecondDerivative);
+            this.Controls.Add(this.showFirstDerivative);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.menuStrip1);
@@ -125,6 +151,8 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ToolStripMenuItem enterPolynomialToolStripMenuItem;
+        private System.Windows.Forms.CheckBox showFirstDerivative;
+        private System.Windows.Forms.CheckBox showSecondDerivative;
     }
 }
 
