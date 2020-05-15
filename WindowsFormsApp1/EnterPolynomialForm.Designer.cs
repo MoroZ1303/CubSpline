@@ -48,9 +48,9 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.poverX,
             this.cofficient});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 67);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 51);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(244, 381);
+            this.dataGridView1.Size = new System.Drawing.Size(244, 413);
             this.dataGridView1.TabIndex = 0;
             // 
             // poverX
@@ -87,7 +87,7 @@
             // 
             this.xRangeBeginInput.Location = new System.Drawing.Point(15, 25);
             this.xRangeBeginInput.Name = "xRangeBeginInput";
-            this.xRangeBeginInput.Size = new System.Drawing.Size(70, 20);
+            this.xRangeBeginInput.Size = new System.Drawing.Size(62, 20);
             this.xRangeBeginInput.TabIndex = 5;
             // 
             // xRangeEndInput
@@ -115,10 +115,10 @@
             this.xRangeEndLabel.TabIndex = 8;
             this.xRangeEndLabel.Text = "X range end";
             // 
-            // xOffset
+            // xOffsetInput
             // 
             this.xOffsetInput.Location = new System.Drawing.Point(189, 25);
-            this.xOffsetInput.Name = "xOffset";
+            this.xOffsetInput.Name = "xOffsetInput";
             this.xOffsetInput.Size = new System.Drawing.Size(62, 20);
             this.xOffsetInput.TabIndex = 6;
             // 

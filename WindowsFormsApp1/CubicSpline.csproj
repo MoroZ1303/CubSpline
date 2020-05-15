@@ -54,11 +54,11 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Polynomial.cs">
+    <Compile Include="EnterPolynomialForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Polynomial.Designer.cs">
-      <DependentUpon>Polynomial.cs</DependentUpon>
+    <Compile Include="EnterPolynomialForm.Designer.cs">
+      <DependentUpon>EnterPolynomialForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PointsInputForm.cs">
       <SubType>Form</SubType>
@@ -74,8 +74,8 @@
     <EmbeddedResource Include="PointsInputForm.resx">
       <DependentUpon>PointsInputForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Polynomial.resx">
-      <DependentUpon>Polynomial.cs</DependentUpon>
+    <EmbeddedResource Include="EnterPolynomialForm.resx">
+      <DependentUpon>EnterPolynomialForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

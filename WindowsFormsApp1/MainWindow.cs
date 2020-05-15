@@ -19,9 +19,8 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainWindow_Load(object sender, EventArgs e)
         {
-
         }
 
         private Series updateChartSeries(string name, SeriesChartType type, Data.Point[] points)
@@ -57,16 +56,19 @@ namespace WindowsFormsApp1
                 Data.SecondDerivative secondDerivative = new Data.SecondDerivative(spline.getPoints());
                 updateChartSeries("f''(x)", SeriesChartType.Spline, secondDerivative.GetPoints());
                 showSecondDerivative.Checked = true;
+                chart1.ChartAreas[0].AxisX.RoundAxisValues();
 
             }
 
 
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void showPolynomial_CheckedChanged(object sender, EventArgs e)
         {
             if (pName != null)
-                chart1.Series[pName].Enabled = checkBox1.Checked;
+                chart1.Series[pName].Enabled = showPolynomial.Checked;
+            else
+                showPolynomial.Checked = false;
 
         }
 
@@ -85,7 +87,8 @@ namespace WindowsFormsApp1
                 {
                     chart1.Series[pName].Points.AddXY(point.getX(), point.getY());
                 }
-                checkBox1.Checked = true;
+                showPolynomial.Checked = true;
+                chart1.ChartAreas[0].AxisX.RoundAxisValues();
             }
 
         }
@@ -94,14 +97,20 @@ namespace WindowsFormsApp1
         {
             string seriesName = "f'(x)";
             Series series = chart1.Series.FindByName(seriesName);
-            series.Enabled = showFirstDerivative.Checked;
+            if (series != null)
+                series.Enabled = showFirstDerivative.Checked;
+            else
+                showFirstDerivative.Checked = false;
         }
 
         private void showSecondDerivative_CheckedChanged(object sender, EventArgs e)
         {
             string seriesName = "f''(x)";
             Series series = chart1.Series.FindByName(seriesName);
-            series.Enabled = showSecondDerivative.Checked;
+            if (series != null)
+                series.Enabled = showSecondDerivative.Checked;
+            else
+                showSecondDerivative.Checked = false;
         }
     }
 }

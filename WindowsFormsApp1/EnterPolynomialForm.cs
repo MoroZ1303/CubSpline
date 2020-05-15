@@ -67,15 +67,15 @@ namespace WindowsFormsApp1
         {
             xRangeBeginInput.GotFocus += new EventHandler((s, evt) =>
             {
-                xRangeBeginInput.BackColor = Color.White;
-                xRangeEndInput.BackColor = Color.White;
-                xOffsetInput.BackColor = Color.White;
+                xRangeBeginInput.ForeColor = Color.Black;
+                xRangeEndInput.ForeColor = Color.Black;
+                xOffsetInput.ForeColor = Color.Black;
             });
             xRangeEndInput.GotFocus += new EventHandler((s, evt) =>
             {
-                xRangeBeginInput.BackColor = Color.White;
-                xRangeEndInput.BackColor = Color.White;
-                xOffsetInput.BackColor = Color.White;
+                xRangeBeginInput.ForeColor = Color.Black;
+                xRangeEndInput.ForeColor = Color.Black;
+                xOffsetInput.ForeColor = Color.Black;
             });
 
             xRangeBeginInput.LostFocus += RangeLostFocus;
@@ -89,15 +89,15 @@ namespace WindowsFormsApp1
             {
                 xRangeBeginInput.Text = rangeAndOffset.Item1.ToString();
                 xRangeEndInput.Text = rangeAndOffset.Item2.ToString();
-                xOffsetInput.Text = rangeAndOffset.Item2.ToString();
+                xOffsetInput.Text = rangeAndOffset.Item3.ToString();
             }
             else
             {
                 xRangeBeginInput.Text = "";
                 xRangeEndInput.Text = "";
             }
-            xRangeBeginInput.BackColor = Color.White;
-            xRangeEndInput.BackColor = Color.White;
+            xRangeBeginInput.ForeColor = Color.Black;
+            xRangeEndInput.ForeColor = Color.Black;
 
             dataGridView1.Rows.Clear();
             foreach (Tuple<int, double> item in state)
@@ -114,7 +114,7 @@ namespace WindowsFormsApp1
             double end;
             if (!Double.TryParse(xRangeBeginInput.Text, out start))
             {
-                xRangeBeginInput.BackColor = Color.Red;
+                xRangeBeginInput.ForeColor = Color.Red;
                 ok = false;
             }
             
@@ -123,28 +123,28 @@ namespace WindowsFormsApp1
 
             if (!Double.TryParse(xRangeEndInput.Text, out end))
             {
-                xRangeEndInput.BackColor = Color.Red;
+                xRangeEndInput.ForeColor = Color.Red;
                 ok = false;
             }
             double offset;
             if (!Double.TryParse(xOffsetInput.Text, out offset))
             {
-                xOffsetInput.BackColor = Color.Red;
+                xOffsetInput.ForeColor = Color.Red;
                 ok = false;
             }
 
             if (start >= end)
             {
-                xRangeBeginInput.BackColor = Color.Red;
-                xRangeEndInput.BackColor = Color.Red;
+                xRangeBeginInput.ForeColor = Color.Red;
+                xRangeEndInput.ForeColor = Color.Red;
                 ok = false;
             }
 
             if (ok)
             {
-                xRangeBeginInput.BackColor = Color.White;
-                xRangeEndInput.BackColor = Color.White;
-                xOffsetInput.BackColor = Color.White;
+                xRangeBeginInput.ForeColor = Color.Black;
+                xRangeEndInput.ForeColor = Color.Black;
+                xOffsetInput.ForeColor = Color.Black;
             }
             return ok;
 

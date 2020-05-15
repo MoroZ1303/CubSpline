@@ -29,14 +29,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Manual_menu_item = new System.Windows.Forms.ToolStripMenuItem();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.enterPolynomialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.showPolynomial = new System.Windows.Forms.CheckBox();
             this.showFirstDerivative = new System.Windows.Forms.CheckBox();
             this.showSecondDerivative = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
@@ -65,16 +65,24 @@
             // Manual_menu_item
             // 
             this.Manual_menu_item.Name = "Manual_menu_item";
-            this.Manual_menu_item.Size = new System.Drawing.Size(180, 22);
+            this.Manual_menu_item.Size = new System.Drawing.Size(164, 22);
             this.Manual_menu_item.Text = "Enter Points";
             this.Manual_menu_item.Click += new System.EventHandler(this.Manual_menu_item_Click);
             // 
+            // enterPolynomialToolStripMenuItem
+            // 
+            this.enterPolynomialToolStripMenuItem.Name = "enterPolynomialToolStripMenuItem";
+            this.enterPolynomialToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.enterPolynomialToolStripMenuItem.Text = "Enter Polynomial";
+            this.enterPolynomialToolStripMenuItem.Click += new System.EventHandler(this.enterPolynomialToolStripMenuItem_Click);
+            // 
             // chart1
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            chartArea1.AxisX.IsMarginVisible = false;
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(23, 42);
             this.chart1.Name = "chart1";
             this.chart1.Size = new System.Drawing.Size(902, 506);
@@ -83,21 +91,14 @@
             // 
             // checkBox1
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(987, 42);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(105, 17);
-            this.checkBox1.TabIndex = 9;
-            this.checkBox1.Text = "Show polynomial";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // enterPolynomialToolStripMenuItem
-            // 
-            this.enterPolynomialToolStripMenuItem.Name = "enterPolynomialToolStripMenuItem";
-            this.enterPolynomialToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.enterPolynomialToolStripMenuItem.Text = "Enter Polynomial";
-            this.enterPolynomialToolStripMenuItem.Click += new System.EventHandler(this.enterPolynomialToolStripMenuItem_Click);
+            this.showPolynomial.AutoSize = true;
+            this.showPolynomial.Location = new System.Drawing.Point(987, 42);
+            this.showPolynomial.Name = "checkBox1";
+            this.showPolynomial.Size = new System.Drawing.Size(105, 17);
+            this.showPolynomial.TabIndex = 9;
+            this.showPolynomial.Text = "Show polynomial";
+            this.showPolynomial.UseVisualStyleBackColor = true;
+            this.showPolynomial.CheckedChanged += new System.EventHandler(this.showPolynomial_CheckedChanged);
             // 
             // showFirstDerivative
             // 
@@ -128,13 +129,13 @@
             this.ClientSize = new System.Drawing.Size(1219, 601);
             this.Controls.Add(this.showSecondDerivative);
             this.Controls.Add(this.showFirstDerivative);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.showPolynomial);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainWindow";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
@@ -149,8 +150,8 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Manual_menu_item;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ToolStripMenuItem enterPolynomialToolStripMenuItem;
+        private System.Windows.Forms.CheckBox showPolynomial;
         private System.Windows.Forms.CheckBox showFirstDerivative;
         private System.Windows.Forms.CheckBox showSecondDerivative;
     }
