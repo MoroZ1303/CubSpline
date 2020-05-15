@@ -42,10 +42,10 @@ namespace Data
             return points;
         }
     };
-    public class Polinomial
+    public class Polynomial
     {
         private double[] coefficients;
-        public Polinomial(double[] coefficients)
+        public Polynomial(double[] coefficients)
         {
             this.coefficients = coefficients;
         }
@@ -61,7 +61,7 @@ namespace Data
             return res;
         }
 
-        public Point[] getPoints(double start, double end, int numberOfPoints = 100)
+        public Point[] getPoints(double start, double end, double xOffset = 0, int numberOfPoints = 100)
         {
             Point[] res = new Point[numberOfPoints];
             double step = (end - start) / numberOfPoints;
@@ -72,7 +72,7 @@ namespace Data
                     x = end;
                 else
                     x = start + i * step;
-                res[i] = new Point(x, f(x));
+                res[i] = new Point(x, f(x - xOffset));
             }
 
             return res;
@@ -83,33 +83,27 @@ namespace Data
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("f(x) = ");
-            for (int i = coefficients.Length - 1; i > 0; i--)
+            bool hasPreceding = false;
+            for (int i = coefficients.Length - 1; i >= 0; i--)
             {
                 double coeff = coefficients[i];
 
                 if (coeff == 0)
                     continue;
 
-                if (i != coefficients.Length - 1)
+                if (coeff >= 0)
                 {
-                    if (coeff >= 0)
+                    if (hasPreceding)
                         sb.Append(" + ");
-                    else
-                        sb.Append(" - ");
                 }
+                else
+                    sb.Append(" - ");
+                hasPreceding = true;
                 sb.Append(Math.Abs(coeff).ToString("0.0"));
-                sb.Append("*x^").Append(i);
+                if (i != 0)
+                    sb.Append("*x^").Append(i);
             }
 
-            if (coefficients.Length > 0 && coefficients[0] != 0)
-            {
-                if (coefficients[0] >= 0)
-                    if (coefficients.Length > 1)
-                        sb.Append(" + ");
-                    else
-                        sb.Append(" - ");
-                sb.Append(Math.Abs(coefficients[0]).ToString("0.0"));
-            }
             return sb.ToString();
         }
     }
@@ -188,11 +182,11 @@ namespace Data
         private double end;
         private Tuple<double, double>[] ranges;
         private Point[] points;
-        private Polinomial[] splines;
+        private Polynomial[] splines;
         public CubicSpline(Point[] inputPoints)
         {
             buildRanges(inputPoints);
-            splines = new Polinomial[ranges.Length];
+            splines = new Polynomial[ranges.Length];
             double[] h = new double[points.Length];
             for (int i = 1; i < points.Length; i++)
             {
@@ -231,7 +225,7 @@ namespace Data
                 double a = points[i - 1].getY(); // свободный коэффициент
                 double d = (c[i + 1] - c[i]) / (3 * h[i]); // коэффициент при x^3
                 double b = (points[i].getY() - points[i - 1].getY()) / h[i] - (2 * c[i] + c[i + 1]) * h[i] / 3; // коэффициент при x^1
-                splines[i - 1] = new Polinomial(new double[] { a, b, c[i], d });
+                splines[i - 1] = new Polynomial(new double[] { a, b, c[i], d });
             }
         }
 

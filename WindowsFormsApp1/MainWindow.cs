@@ -70,13 +70,13 @@ namespace WindowsFormsApp1
             if (polynomial.ShowDialog(this) == DialogResult.OK)
             {
 
-                Data.Polinomial p = polynomial.getPolynomial();
+                Data.Polynomial p = polynomial.getPolynomial();
                 if (pName != null)
                     chart1.Series.Remove(chart1.Series[pName]);
                 pName = p.ToString();
                 chart1.Series.Add(pName);
                 chart1.Series[pName].ChartType = SeriesChartType.Spline;
-                foreach (Data.Point point in p.getPoints(polynomial.rangeStart, polynomial.rangeEnd))
+                foreach (Data.Point point in p.getPoints(polynomial.rangeStart, polynomial.rangeEnd, polynomial.xOffset))
                 {
                     chart1.Series[pName].Points.AddXY(point.getX(), point.getY());
                 }

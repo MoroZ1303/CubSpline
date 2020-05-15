@@ -15,13 +15,13 @@ namespace WindowsFormsApp1
     {
 
         List<Tuple<int, double>> state = new List<Tuple<int, double>>();
-        Tuple<double, double> range = null;
+        Tuple<double, double, double> rangeAndOffset = null;
 
         public EnterPolynomialForm()
         {
             InitializeComponent();
         }
-        public Data.Polinomial getPolynomial()
+        public Data.Polynomial getPolynomial()
         {
             int max = 0;
 
@@ -38,20 +38,28 @@ namespace WindowsFormsApp1
                 double c = i.Item2;
                 cofficients[pow] = c;
             }
-            return new Data.Polinomial(cofficients);
+            return new Data.Polynomial(cofficients);
         }
 
         public double rangeStart
         {
             get {
-                return range.Item1;
+                return rangeAndOffset.Item1;
             }
         }
         public double rangeEnd
         {
             get
             {
-                return range.Item2;
+                return rangeAndOffset.Item2;
+            }
+        }
+
+        public double xOffset
+        {
+            get
+            {
+                return rangeAndOffset.Item3;
             }
         }
 
@@ -61,21 +69,27 @@ namespace WindowsFormsApp1
             {
                 xRangeBeginInput.BackColor = Color.White;
                 xRangeEndInput.BackColor = Color.White;
+                xOffsetInput.BackColor = Color.White;
             });
             xRangeEndInput.GotFocus += new EventHandler((s, evt) =>
             {
                 xRangeBeginInput.BackColor = Color.White;
                 xRangeEndInput.BackColor = Color.White;
+                xOffsetInput.BackColor = Color.White;
             });
-            xRangeBeginInput.LostFocus += new EventHandler(RangeLostFocus);
-            xRangeEndInput.LostFocus += new EventHandler(RangeLostFocus);
-            this.dataGridView1.CellValidating += new DataGridViewCellValidatingEventHandler(dataGridView1_CellValidating);
-            this.dataGridView1.CellEndEdit += new DataGridViewCellEventHandler(dataGridView1_CellEndEdit);
+
+            xRangeBeginInput.LostFocus += RangeLostFocus;
+            xRangeEndInput.LostFocus += RangeLostFocus;
+            xOffsetInput.LostFocus += RangeLostFocus;
             
-            if (range != null)
+            dataGridView1.CellValidating += dataGridView1_CellValidating;
+            dataGridView1.CellEndEdit += dataGridView1_CellEndEdit;
+            
+            if (rangeAndOffset != null)
             {
-                xRangeBeginInput.Text = range.Item1.ToString();
-                xRangeEndInput.Text = range.Item2.ToString();
+                xRangeBeginInput.Text = rangeAndOffset.Item1.ToString();
+                xRangeEndInput.Text = rangeAndOffset.Item2.ToString();
+                xOffsetInput.Text = rangeAndOffset.Item2.ToString();
             }
             else
             {
@@ -93,7 +107,7 @@ namespace WindowsFormsApp1
 
         }
 
-        private bool ValidateRange()
+        private bool ValidateRangeAndOffset()
         {
             bool ok = true;
             double start;
@@ -103,21 +117,34 @@ namespace WindowsFormsApp1
                 xRangeBeginInput.BackColor = Color.Red;
                 ok = false;
             }
+            
+            if (String.IsNullOrEmpty(xOffsetInput.Text))
+                xOffsetInput.Text = xRangeBeginInput.Text;
+
             if (!Double.TryParse(xRangeEndInput.Text, out end))
             {
                 xRangeEndInput.BackColor = Color.Red;
                 ok = false;
             }
+            double offset;
+            if (!Double.TryParse(xOffsetInput.Text, out offset))
+            {
+                xOffsetInput.BackColor = Color.Red;
+                ok = false;
+            }
+
             if (start >= end)
             {
                 xRangeBeginInput.BackColor = Color.Red;
                 xRangeEndInput.BackColor = Color.Red;
                 ok = false;
             }
+
             if (ok)
             {
                 xRangeBeginInput.BackColor = Color.White;
                 xRangeEndInput.BackColor = Color.White;
+                xOffsetInput.BackColor = Color.White;
             }
             return ok;
 
@@ -125,8 +152,10 @@ namespace WindowsFormsApp1
 
         private void RangeLostFocus(object sender, EventArgs e)
         {
-            ValidateRange();
+            ValidateRangeAndOffset();
         }
+
+
 
         private void okButton_Click(object sender, EventArgs e)
         {
@@ -152,7 +181,7 @@ namespace WindowsFormsApp1
                 dataGridView1.Rows[i].ErrorText = String.Empty;
             }
 
-            ok = ok && ValidateRange();
+            ok = ok && ValidateRangeAndOffset();
 
             
             if (dataGridView1.RowCount < 2)
@@ -183,7 +212,10 @@ namespace WindowsFormsApp1
             if (!ok)
                 return;
 
-            range = new Tuple<double, double>(Double.Parse(xRangeBeginInput.Text), Double.Parse(xRangeEndInput.Text));
+            rangeAndOffset = new Tuple<double, double, double>(
+                Double.Parse(xRangeBeginInput.Text), 
+                Double.Parse(xRangeEndInput.Text),
+                Double.Parse(xOffsetInput.Text));
             state = newState;
             this.DialogResult = DialogResult.OK;
         }
@@ -232,7 +264,6 @@ namespace WindowsFormsApp1
             // Clear the row error in case the user presses ESC.
             dataGridView1.Rows[e.RowIndex].ErrorText = String.Empty;
         }
-
-
+       
     }
 }
