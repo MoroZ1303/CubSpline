@@ -215,8 +215,9 @@ namespace Data
             Point[] res = new Point[points.Length - 5];
             for (int i = 2; i < points.Length - 3; i++)
             {
-                double t = (points[i + 2].getY() - 2 * points[i].getY() + points[i - 2].getY());
-                double dx2 = t / (points[i + 2].getX() - points[i].getX());
+                double y = (points[i + 2].getY() - 2 * points[i].getY() + points[i - 2].getY());
+                double t = (points[i + 2].getX() - points[i].getX());
+                double dx2 = y / (t*t);
                 res[i-2] = new Point(points[i].getX(), dx2);
             }
             return res;
