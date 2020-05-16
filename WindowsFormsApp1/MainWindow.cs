@@ -9,9 +9,8 @@ namespace WindowsFormsApp1
     public partial class MainWindow : Form
     {
         private PointsInputForm inputDataForm = new PointsInputForm();
-        private EnterPolynomialForm polynomial = new EnterPolynomialForm();
+        private EnterPolynomialForm polynomialInput = new EnterPolynomialForm();
 
-        private string pName;
         OpenFileDialog openFileDialogue = new OpenFileDialog();
 
         public MainWindow()
@@ -23,13 +22,10 @@ namespace WindowsFormsApp1
         {
         }
 
-        private Series updateChartSeries(string name, SeriesChartType type, Data.Point[] points)
+        private Series updateChartSeries(string name, Data.Point[] points)
         {
             Series series = chart1.Series.FindByName(name);
-            if (series != null)
-                chart1.Series.Remove(series);
-            series = chart1.Series.Add(name);
-            series.ChartType = type;
+            series.Points.Clear();
             foreach (var p in points)
             {
                 series.Points.AddXY(p.getX(), p.getY());
@@ -43,21 +39,20 @@ namespace WindowsFormsApp1
             {
                 Data.Point[] points = inputDataForm.GetPoints();
 
-                updateChartSeries("points", SeriesChartType.Point, points);
+                updateChartSeries("points", points);
 
                 Data.CubicSpline spline = new Data.CubicSpline(points);
                 Data.Point[] splinePoints = spline.getPoints();
-                updateChartSeries("spline", SeriesChartType.Spline, splinePoints);
+                updateChartSeries("spline", splinePoints);
 
                 Data.FirstDerivative firstDerivative = new Data.FirstDerivative(spline.getPoints());
-                updateChartSeries("f'(x)", SeriesChartType.Spline, firstDerivative.GetPoints());
-                showFirstDerivative.Checked = true;
+                updateChartSeries("firstDerivative", firstDerivative.GetPoints()).Enabled = false;
+                showFirstDerivative.Checked = false;
 
                 Data.SecondDerivative secondDerivative = new Data.SecondDerivative(spline.getPoints());
-                updateChartSeries("f''(x)", SeriesChartType.Spline, secondDerivative.GetPoints());
-                showSecondDerivative.Checked = true;
+                updateChartSeries("secondDerivative", secondDerivative.GetPoints()).Enabled = false;
+                showSecondDerivative.Checked = false;
                 chart1.ChartAreas[0].AxisX.RoundAxisValues();
-
             }
 
 
@@ -65,52 +60,52 @@ namespace WindowsFormsApp1
 
         private void showPolynomial_CheckedChanged(object sender, EventArgs e)
         {
-            if (pName != null)
-                chart1.Series[pName].Enabled = showPolynomial.Checked;
-            else
+            if (!polynomialInput.hasData)
+            {
+                chart1.Series["polynomial"].Enabled = false;
                 showPolynomial.Checked = false;
-
+            }
+            chart1.Series["polynomial"].Enabled = showPolynomial.Checked;
+            chart1.ResetAutoValues();
         }
 
         private void enterPolynomialToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (polynomial.ShowDialog(this) == DialogResult.OK)
+            if (polynomialInput.ShowDialog(this) == DialogResult.OK)
             {
 
-                Data.Polynomial p = polynomial.getPolynomial();
-                if (pName != null)
-                    chart1.Series.Remove(chart1.Series[pName]);
-                pName = p.ToString();
-                chart1.Series.Add(pName);
-                chart1.Series[pName].ChartType = SeriesChartType.Spline;
-                foreach (Data.Point point in p.getPoints(polynomial.rangeStart, polynomial.rangeEnd, polynomial.xOffset))
-                {
-                    chart1.Series[pName].Points.AddXY(point.getX(), point.getY());
-                }
+                Data.Polynomial p = polynomialInput.getPolynomial();
+                Series series = updateChartSeries("polynomial", p.getPoints(polynomialInput.rangeStart, polynomialInput.rangeEnd, polynomialInput.xOffset));
+                series.LegendText = p.ToString();
+                series.Enabled = true;
                 showPolynomial.Checked = true;
                 chart1.ChartAreas[0].AxisX.RoundAxisValues();
+                chart1.ResetAutoValues();
             }
 
         }
 
+        private void showSpline_CheckedChanged(object sender, EventArgs e)
+        {
+            Series series = chart1.Series.FindByName("spline");
+            series.Enabled = showSpline.Checked;
+            chart1.ChartAreas[0].AxisX.RoundAxisValues();
+            chart1.ResetAutoValues();
+        }
+
         private void showFirstDerivative_CheckedChanged(object sender, EventArgs e)
         {
-            string seriesName = "f'(x)";
-            Series series = chart1.Series.FindByName(seriesName);
-            if (series != null)
-                series.Enabled = showFirstDerivative.Checked;
-            else
-                showFirstDerivative.Checked = false;
+            Series series = chart1.Series.FindByName("firstDerivative");
+            series.Enabled = showFirstDerivative.Checked;
+            chart1.ChartAreas[0].AxisX.RoundAxisValues();
+            chart1.ResetAutoValues();
         }
 
         private void showSecondDerivative_CheckedChanged(object sender, EventArgs e)
         {
-            string seriesName = "f''(x)";
-            Series series = chart1.Series.FindByName(seriesName);
-            if (series != null)
-                series.Enabled = showSecondDerivative.Checked;
-            else
-                showSecondDerivative.Checked = false;
+            Series series = chart1.Series.FindByName("secondDerivative");
+            series.Enabled = showSecondDerivative.Checked;
+            chart1.ResetAutoValues();
         }
     }
 }

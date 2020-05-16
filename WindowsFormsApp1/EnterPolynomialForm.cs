@@ -265,5 +265,13 @@ namespace WindowsFormsApp1
             dataGridView1.Rows[e.RowIndex].ErrorText = String.Empty;
         }
        
+        public bool hasData
+        {
+            get
+            {
+                return rangeAndOffset != null && state.Count > 0;
+            }
+        }
+
     }
 }
