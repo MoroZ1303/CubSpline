@@ -59,6 +59,26 @@ namespace Data
             return res;
         }
 
+        public Polynomial derivative(int order)
+        {
+            switch (order)
+            {
+                case 0:
+                    return new Polynomial(coefficients);
+                case 1:
+                    double[] newCoeffs = new double[coefficients.Length - 1];
+                    for (int i = 1; i < coefficients.Length; i++)
+                    {
+                        newCoeffs[i - 1] = coefficients[i] * i;
+                    }
+                    return new Polynomial(newCoeffs);
+                default:
+                    if (order < 0)
+                        throw new ArgumentOutOfRangeException("Derivative order can't be negative");
+                    return derivative(order - 1).derivative(1);
+            }
+        }
+
         public Point[] GetPoints(double start, double end, double xOffset = 0, int numberOfPoints = 100)
         {
             Point[] res = new Point[numberOfPoints];
@@ -245,6 +265,16 @@ namespace Data
             return -1;
         }
 
+        public double f(double x)
+        {
+            if (x < rangeStart || x > rangeEnd)
+                throw new ArgumentOutOfRangeException("argument is out of range of cubic spline");
+
+            int iRange = FindRange(x);
+            double y = splines[iRange].f(x - subRanges[iRange].Item1);
+            return y;
+        }
+
         public Point[] GetPoints(int numberOfPoints = 100)
         {
             double step = (rangeEnd - rangeStart) / numberOfPoints;
@@ -264,6 +294,21 @@ namespace Data
                 res[i] = new Point(x, y);
             }
             return res;
+        }
+
+        public Tuple<double, double>[] SubRanges
+        {
+            get
+            {
+                return subRanges;
+            }
+        }
+        public Polynomial[] Splines
+        {
+            get
+            {
+                return splines;
+            }
         }
     }
 
