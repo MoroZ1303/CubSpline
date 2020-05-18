@@ -30,9 +30,9 @@ namespace Data
 
                 while ((l = reader.ReadLine()) != null)
                 {
-                    string[] parts = l.Split(new char[] { ',' });
-                    double x = Double.Parse(parts[0]);
-                    double y = Double.Parse(parts[1]);
+                    string[] parts = l.Trim().Split(new char[] { ' ', '\t' }).Where(t => !String.IsNullOrEmpty(t)).ToArray();
+                    double x = Double.Parse(parts[0].Trim());
+                    double y = Double.Parse(parts[1].Trim());
                     points.Add(new Point(x, y));
                 }
             }
