@@ -8,7 +8,7 @@ namespace WindowsFormsApp1
 {
     public partial class MainWindow : Form
     {
-        private PointsInputForm inputDataForm = new PointsInputForm();
+        private PointsInputForm dataInputForm = new PointsInputForm();
         OpenFileDialog openFileDialogue = new OpenFileDialog();
 
         public MainWindow()
@@ -33,9 +33,9 @@ namespace WindowsFormsApp1
         private void EnterEditMenuItem_Click(object sender, EventArgs e)
         {
 
-            if (inputDataForm.ShowDialog(this) == DialogResult.OK)
+            if (dataInputForm.ShowDialog(this) == DialogResult.OK)
             {
-                Data.Point[] points = inputDataForm.GetPoints();
+                Data.Point[] points = dataInputForm.GetPoints();
 
                 updateChartSeries("points", points);
 

@@ -34,8 +34,8 @@
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enterEditMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataEnterEditMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
@@ -44,7 +44,7 @@
             // menuStrip1
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.dataStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip1";
             this.menuStrip.Size = new System.Drawing.Size(961, 24);
@@ -53,18 +53,18 @@
             // 
             // fileToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.enterEditMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
-            this.fileToolStripMenuItem.Text = "Данные";
+            this.dataStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dataEnterEditMenuItem});
+            this.dataStripMenuItem.Name = "fileToolStripMenuItem";
+            this.dataStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.dataStripMenuItem.Text = "Данные";
             // 
             // Manual_menu_item
             // 
-            this.enterEditMenuItem.Name = "Manual_menu_item";
-            this.enterEditMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.enterEditMenuItem.Text = "Ввести/Редактировать";
-            this.enterEditMenuItem.Click += new System.EventHandler(this.EnterEditMenuItem_Click);
+            this.dataEnterEditMenuItem.Name = "Manual_menu_item";
+            this.dataEnterEditMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.dataEnterEditMenuItem.Text = "Ввести/Редактировать";
+            this.dataEnterEditMenuItem.Click += new System.EventHandler(this.EnterEditMenuItem_Click);
             // 
             // chart1
             // 
@@ -120,8 +120,8 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem enterEditMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dataStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dataEnterEditMenuItem;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart;
     }
 }
