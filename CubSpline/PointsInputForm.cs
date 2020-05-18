@@ -160,7 +160,7 @@ namespace CubicSplineApp
                 try
                 {
                     dataGridView.Rows.Clear();
-                    foreach(var p in Data.Utils.getPointsFromFile(openFileDialog.OpenFile()))
+                    foreach(var p in Data.Utils.GetPointsFromFile(openFileDialog.OpenFile()))
                     {
                         dataGridView.Rows.Add(new string[] { p.getX().ToString(), p.getY().ToString() });
                     }

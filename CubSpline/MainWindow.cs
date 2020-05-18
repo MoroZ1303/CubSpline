@@ -17,7 +17,7 @@ namespace CubicSplineApp
         {
         }
 
-        private Series updateChartSeries(string name, Data.Point[] points)
+        private Series UpdateChartSeries(string name, Data.Point[] points)
         {
             Series series = chart.Series.FindByName(name);
             series.Points.Clear();
@@ -34,11 +34,11 @@ namespace CubicSplineApp
             {
                 Data.Point[] points = dataInputForm.GetPoints();
 
-                updateChartSeries("points", points);
+                UpdateChartSeries("points", points);
 
                 Data.CubicSpline spline = new Data.CubicSpline(points);
-                Data.Point[] splinePoints = spline.getPoints();
-                updateChartSeries("spline", splinePoints);
+                Data.Point[] splinePoints = spline.GetPoints();
+                UpdateChartSeries("spline", splinePoints);
 
             }
         }
