@@ -3,13 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using CubicSplineApp;
+
 
 namespace Data
 {
-
-
     public class Point
     {
         double x;
@@ -24,7 +21,7 @@ namespace Data
     }
     class Utils
     {
-        public static List<Point> getPointsFromFile(System.IO.Stream stream)
+        public static List<Point> GetPointsFromFile(System.IO.Stream stream)
         {
             List<Point> points = new List<Point>();
             using (StreamReader reader = new StreamReader(stream))
@@ -62,7 +59,7 @@ namespace Data
             return res;
         }
 
-        public Point[] getPoints(double start, double end, double xOffset = 0, int numberOfPoints = 100)
+        public Point[] GetPoints(double start, double end, double xOffset = 0, int numberOfPoints = 100)
         {
             Point[] res = new Point[numberOfPoints];
             double step = (end - start) / numberOfPoints;
@@ -77,35 +74,6 @@ namespace Data
             }
 
             return res;
-        }
-
-
-        public new string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("f(x) = ");
-            bool hasPreceding = false;
-            for (int i = coefficients.Length - 1; i >= 0; i--)
-            {
-                double coeff = coefficients[i];
-
-                if (coeff == 0)
-                    continue;
-
-                if (coeff >= 0)
-                {
-                    if (hasPreceding)
-                        sb.Append(" + ");
-                }
-                else
-                    sb.Append(" - ");
-                hasPreceding = true;
-                sb.Append(Math.Abs(coeff).ToString("0.0"));
-                if (i != 0)
-                    sb.Append("*x^").Append(i);
-            }
-
-            return sb.ToString();
         }
     }
 
@@ -148,7 +116,7 @@ namespace Data
         }
 
         // Решение методом прогонки
-        public double[] solve(double[] F)
+        public double[] Solve(double[] F)
         {
             // Размер матрицы должен совпадать
             // с размером вектора свободных коэффициентов
@@ -177,64 +145,17 @@ namespace Data
         }
     }
 
-    public class FirstDerivative
-    {
-        Point[] points;
-
-        public FirstDerivative(Point[] inputPoints)
-        {
-            // Сортируем точки по х
-            points = inputPoints.OrderBy(p => p.getX()).ToArray();
-        }
-
-        public Point[] GetPoints()
-        {
-            Point[] res = new Point[points.Length - 1];
-            for (int i = 0; i < points.Length - 1; i++)
-            {
-
-                double dx = (points[i + 1].getY() - points[i].getY()) / (points[i + 1].getX() - points[i].getX());
-                res[i] = new Point(points[i].getX(), dx);
-            }
-            return res;
-        }
-    }
-
-    public class SecondDerivative
-    {
-        Point[] points;
-
-        public SecondDerivative(Point[] inputPoints)
-        {
-            // Сортируем точки по х
-            points = inputPoints.OrderBy(p => p.getX()).ToArray();
-        }
-
-        public Point[] GetPoints()
-        {
-            Point[] res = new Point[points.Length - 5];
-            for (int i = 2; i < points.Length - 3; i++)
-            {
-                double y = (points[i + 2].getY() - 2 * points[i].getY() + points[i - 2].getY());
-                double t = (points[i + 2].getX() - points[i].getX());
-                double dx2 = y / (t*t);
-                res[i-2] = new Point(points[i].getX(), dx2);
-            }
-            return res;
-        }
-    }
-
     public class CubicSpline
     {
-        private double start;
-        private double end;
-        private Tuple<double, double>[] ranges;
+        private double rangeStart;
+        private double rangeEnd;
+        private Tuple<double, double>[] subRanges;
         private Point[] points;
         private Polynomial[] splines;
         public CubicSpline(Point[] inputPoints)
         {
-            buildRanges(inputPoints);
-            splines = new Polynomial[ranges.Length];
+            BuildRanges(inputPoints);
+            splines = new Polynomial[subRanges.Length];
             double[] h = new double[points.Length];
             for (int i = 1; i < points.Length; i++)
             {
@@ -243,7 +164,7 @@ namespace Data
 
             TriDiagonalMatrix matrix = new TriDiagonalMatrix(points.Length - 2);
             double[] F = new double[points.Length - 2];
-            // Построение системы динейных уравнений относительно coeff_c[i],  коэффициент при x^2
+            // Построение системы динейных уравнений относительно coeff_c[i], коэффициент при x^2
 
             for (int i = 2; i < points.Length; i++)
             {
@@ -251,7 +172,7 @@ namespace Data
                 matrix[i - 2].c = 2 * (h[i] + h[i - 1]);
                 matrix[i - 2].b = h[i];
                 F[i - 2] = 3 * ((points[i].getY() - points[i - 1].getY()) / h[i] -
-                    (points[i - 1].getY() - points[i - 2].getY()) / h[i - 1]);
+                (points[i - 1].getY() - points[i - 2].getY()) / h[i - 1]);
             }
             matrix[0].a = 0;
             matrix[matrix.Length - 1].b = 0;
@@ -260,7 +181,7 @@ namespace Data
             double[] c = new double[points.Length + 1];
             c[0] = 0;
             c[1] = 0;
-            double[] t = matrix.solve(F);
+            double[] t = matrix.Solve(F);
             Array.Copy(t, 0, c, 2, t.Length);
             c[c.Length - 1] = 0;
 
@@ -278,7 +199,7 @@ namespace Data
         }
 
         // Строим интервалы между точками
-        private void buildRanges(Point[] pts)
+        private void BuildRanges(Point[] pts)
         {
             // Исключаем повторяющуеся точки
             Dictionary<double, double> dict = new Dictionary<double, double>();
@@ -291,7 +212,7 @@ namespace Data
                     if (dict[pts[i].getX()] == pts[i].getY())
                         continue;
 
-                    // Для одного и того же X существует 2 точки с различными Y 
+                    // Для одного и того же X существует 2 точки с различными Y
                     throw new Exception();
                 }
                 // Добавляем точку в словарь
@@ -304,42 +225,42 @@ namespace Data
 
             // Преобразуем список в массив и строим интервалы
             points = sorted.ToArray();
-            ranges = new Tuple<double, double>[points.Length - 1];
+            subRanges = new Tuple<double, double>[points.Length - 1];
             for (int i = 0; i < points.Length - 1; i++)
             {
-                ranges[i] = new Tuple<double, double>(points[i].getX(), points[i + 1].getX());
+                subRanges[i] = new Tuple<double, double>(points[i].getX(), points[i + 1].getX());
             }
 
-            start = points[0].getX();
-            end = points[points.Length - 1].getX();
+            rangeStart = points[0].getX();
+            rangeEnd = points[points.Length - 1].getX();
         }
 
-        int findRange(double X)
+        private int FindRange(double X)
         {
-            for (int i = 0; i < ranges.Length; i++)
+            for (int i = 0; i < subRanges.Length; i++)
             {
-                if (X >= ranges[i].Item1 && X <= ranges[i].Item2)
+                if (X >= subRanges[i].Item1 && X <= subRanges[i].Item2)
                     return i;
             }
             return -1;
         }
 
-        public Point[] getPoints(int numberOfPoints = 100)
+        public Point[] GetPoints(int numberOfPoints = 100)
         {
-            double step = (end - start) / numberOfPoints;
+            double step = (rangeEnd - rangeStart) / numberOfPoints;
             Point[] res = new Point[numberOfPoints];
             for (int i = 0; i < numberOfPoints; i++)
             {
-                double x = start + i * step;
+                double x = rangeStart + i * step;
                 if (i == numberOfPoints - 1)
-                    x = end;
-                int iRange = findRange(x);
+                    x = rangeEnd;
+                int iRange = FindRange(x);
                 if (splines[iRange] == null)
                 {
                     res[i] = new Point(x, 1);
                     continue;
                 }
-                double y = splines[iRange].f(x - ranges[iRange].Item1);
+                double y = splines[iRange].f(x - subRanges[iRange].Item1);
                 res[i] = new Point(x, y);
             }
             return res;

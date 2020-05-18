@@ -10,11 +10,11 @@ namespace UnitTests
         public static void TestSinglePoly(double[] coeffs, Tuple<double, double> range)
         {
             Data.Polynomial poly = new Data.Polynomial(coeffs);
-            Data.Point[] points = poly.getPoints(range.Item1, range.Item2, 0, 10);
+            Data.Point[] points = poly.GetPoints(range.Item1, range.Item2, 0, 10);
 
             // Создаем сплайн и генерируем в 10 раз больше точек чем в оригинальном полиноме
             CubicSpline spline = new CubicSpline(points);
-            Point[] splinePoints = spline.getPoints(100);
+            Point[] splinePoints = spline.GetPoints(100);
 
             // Проверяем что совпадают концы интервала
             Assert.AreEqual(range.Item1, splinePoints[0].getX());
