@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 
-namespace WindowsFormsApp1
+namespace CubicSplineApp
 {
     public partial class PointsInputForm : Form
     {
@@ -28,16 +28,16 @@ namespace WindowsFormsApp1
 
         private void GridViewCellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            isCellValid(e.RowIndex, e.ColumnIndex);
+            IsCellValid(e.RowIndex, e.ColumnIndex);
         }
 
-        void GridViewCellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void GridViewCellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // Clear the row error in case the user presses ESC.
-            isCellValid(e.RowIndex, e.ColumnIndex);
+            IsCellValid(e.RowIndex, e.ColumnIndex);
         }
 
-        private bool isCellValid(int row, int col, out string errMsg)
+        private bool IsCellValid(int row, int col, out string errMsg)
         {
             string headerText = dataGridView.Columns[col].HeaderText;
             string value = dataGridView.Rows[row].Cells[col].FormattedValue.ToString();
@@ -66,10 +66,10 @@ namespace WindowsFormsApp1
             return true;
         }
 
-        private bool isCellValid(int row, int col, bool setErrMsg = true)
+        private bool IsCellValid(int row, int col, bool setErrMsg = true)
         {
             string errMsg;
-            bool valid = isCellValid(row, col, out errMsg);
+            bool valid = IsCellValid(row, col, out errMsg);
             if (setErrMsg)
                 dataGridView.Rows[row].ErrorText = errMsg;
             else
@@ -78,7 +78,7 @@ namespace WindowsFormsApp1
 
         }
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void OkButton_Click(object sender, EventArgs e)
         {
             if (dataGridView.RowCount < 3)
             {
@@ -91,8 +91,8 @@ namespace WindowsFormsApp1
             for (int i = 0; i < dataGridView.RowCount - 1; i++)
             {
                 dataGridView.Rows[i].ErrorText = String.Empty;
-                valid = valid && isCellValid(i, 0);
-                valid = valid && isCellValid(i, 1);
+                valid = valid && IsCellValid(i, 0);
+                valid = valid && IsCellValid(i, 1);
             }
 
             if (!valid)
@@ -128,7 +128,7 @@ namespace WindowsFormsApp1
             this.DialogResult = DialogResult.OK;
         }
 
-        private void cancel_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
         }
@@ -153,7 +153,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
