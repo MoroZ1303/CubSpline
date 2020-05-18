@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -9,7 +7,6 @@ namespace WindowsFormsApp1
     public partial class MainWindow : Form
     {
         private PointsInputForm dataInputForm = new PointsInputForm();
-        OpenFileDialog openFileDialogue = new OpenFileDialog();
 
         public MainWindow()
         {
