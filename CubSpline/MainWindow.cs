@@ -27,7 +27,7 @@ namespace WindowsFormsApp1
             }
             return series;
         }
-        private void EnterEditMenuItem_Click(object sender, EventArgs e)
+        private void DataEnterEditMenuItem_Click(object sender, EventArgs e)
         {
 
             if (dataInputForm.ShowDialog(this) == DialogResult.OK)

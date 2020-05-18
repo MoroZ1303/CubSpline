@@ -64,7 +64,7 @@
             this.dataEnterEditMenuItem.Name = "Manual_menu_item";
             this.dataEnterEditMenuItem.Size = new System.Drawing.Size(196, 22);
             this.dataEnterEditMenuItem.Text = "Ввести/Редактировать";
-            this.dataEnterEditMenuItem.Click += new System.EventHandler(this.EnterEditMenuItem_Click);
+            this.dataEnterEditMenuItem.Click += new System.EventHandler(this.DataEnterEditMenuItem_Click);
             // 
             // chart1
             // 
