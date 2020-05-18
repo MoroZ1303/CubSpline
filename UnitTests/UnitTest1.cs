@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading;
+using System.Linq;
 using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,354 +7,80 @@ namespace UnitTests
 {
     class Utils
     {
-        public static void TestSinglePoly(double[] coeffs, Tuple<double, double> range)
+        public static void TestSpline(Func<double, double> f, double rangeStart, double rangeEnd)
         {
-            Data.Polynomial poly = new Data.Polynomial(coeffs);
-            Data.Point[] points = poly.GetPoints(range.Item1, range.Item2, 0, 10);
-
-            // Создаем сплайн и генерируем в 10 раз больше точек чем в оригинальном полиноме
-            CubicSpline spline = new CubicSpline(points);
-            Point[] splinePoints = spline.GetPoints(100);
-
-            // Проверяем что совпадают концы интервала
-            Assert.AreEqual(range.Item1, splinePoints[0].getX());
-            Assert.AreEqual(range.Item2, splinePoints[splinePoints.Length - 1].getX());
-
-            // Проверяем что точки сплайна совпадают с полиномом
-            int count = 0;
-            foreach (var sp in splinePoints)
+            // Фиксируем seed для повторяемости тестов
+            Random rand = new Random(1000);
+            int nPoints = 10; // rand.Next(2, 10);
+            Point[] points = new Point[nPoints];
+            for (int i = 0; i < nPoints; i++)
             {
-                double expected = poly.f(sp.getX());
-                double delta = Math.Abs(expected * 1e-2);
-                if (Math.Abs(expected - sp.getY()) > delta)
-                {
-                    count++;
-                    System.Console.Out.WriteLine("Error");
-                }
-                //Assert.AreEqual(expected, sp.getY(), delta);
+                double x = rangeStart + (rangeEnd - rangeStart) * rand.NextDouble();
+                points[i] = new Point(x, f(x));
+            }
+
+            CubicSpline spline = new CubicSpline(points);
+
+            Point[] sortedPoints = points.OrderBy(p => p.getX()).ToArray();
+
+            // Проверяем что точки функции и сплайна совпадают
+            foreach(Point p in points)
+            {
+                double expected = p.getY();
+                double test = spline.f(p.getX());
+                Assert.AreEqual(expected, test, Math.Abs(expected * 1e-6));
+            }
+
+            // Проверяем совпадение первой и второй производной в точках соединения сплайнов
+            for (int i = 1; i < spline.SubRanges.Length; i++)
+            {
+                // x слева и справа совпадают 
+                Assert.AreEqual(spline.SubRanges[i - 1].Item2, spline.SubRanges[i].Item1);
+                double x = spline.SubRanges[i].Item1;
+
+                // Первая производная слева и с права совпадают
+                double left1 = spline.Splines[i - 1].derivative(1).f(x - spline.SubRanges[i - 1].Item1);
+                double right1 = spline.Splines[i].derivative(1).f(0);
+                Assert.AreEqual(left1, right1, Math.Min(Math.Abs(left1), Math.Abs(right1)) * 1e-6);
+
+                // Вторая производная слева и с права совпадают
+                double left2 = spline.Splines[i - 1].derivative(2).f(x - spline.SubRanges[i - 1].Item1);
+                double right2 = spline.Splines[i].derivative(2).f(0);
+                Assert.AreEqual(left2, right2, Math.Min(Math.Abs(left2), Math.Abs(right2)) * 1e-6);
             }
         }
-
-    }
-    [TestClass]
-    public class CubicSplineTestsPoly0
-    {
-        double[][] variants = new double[][]
-        {
-            new double [] {-1},
-            new double [] {0},
-            new double [] {1}
-        };
-
-        Tuple<double, double>[] ranges = new Tuple<double, double>[]
-        {
-            new Tuple<double, double>(-100, 100), // Symmetric range
-            new Tuple<double, double>(-100, -1),  // Negative range
-            new Tuple<double, double>(1, 100)     // Positive range
-        };
-
-
-        // Variant 0
-
-        [TestMethod]
-        public void Variant0SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[0], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant0NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[0], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant0PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[0], ranges[2]);
-        }
-
-
-        // Variant 1
-
-        [TestMethod]
-        public void Variant1SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant1NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant1PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[2]);
-        }
-
-        // Variant 2
-
-        [TestMethod]
-        public void Variant2SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant2NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant2PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[2]);
-        }
-
-
     }
 
     [TestClass]
-    public class CubicSplineTestsPoly1
+    public class SplineTests
     {
-        double[][] variants = new double[][]
-        {
-            new double [] {-1, 3},
-            new double [] {0, 0},
-            new double [] {1, -3}
-        };
-
-        Tuple<double, double>[] ranges = new Tuple<double, double>[]
-        {
-            new Tuple<double, double>(-100, 100), // Symmetric range
-            new Tuple<double, double>(-100, -1),  // Negative range
-            new Tuple<double, double>(1, 100)     // Positive range
-        };
-
-
-        // Variant 0
 
         [TestMethod]
-        public void Variant0SymmetricRange()
+        public void TestSin()
         {
-            Utils.TestSinglePoly(variants[0], ranges[0]);
+            Utils.TestSpline(x => Math.Sin(x), -6, 6);
         }
 
         [TestMethod]
-        public void Variant0NegativecRange()
+        public void TestPoly()
         {
-            Utils.TestSinglePoly(variants[0], ranges[1]);
+            Utils.TestSpline(x => 0.2*x*x + x - 10, 0, 20);
         }
 
         [TestMethod]
-        public void Variant0PositiveRange()
+        public void TestRand()
         {
-            Utils.TestSinglePoly(variants[0], ranges[2]);
+            Random rand = new Random(100);
+            for (int i = 0; i < 100; i++)
+            {
+                double rangeStart = rand.Next(-100, 100);
+                double rangeEnd = rangeStart + rand.Next(10, 100);
+
+                Utils.TestSpline(x => rangeStart + (rangeEnd - rangeStart)*rand.NextDouble(), rangeStart, rangeEnd);
+            }
+
+            Utils.TestSpline(x => 0.2 * x * x + x - 10, 0, 20);
         }
 
-
-        // Variant 1
-
-        [TestMethod]
-        public void Variant1SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant1NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant1PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[2]);
-        }
-
-        // Variant 2
-
-        [TestMethod]
-        public void Variant2SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant2NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant2PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[2]);
-        }
-    }
-
-    [TestClass]
-    public class CubicSplineTestsPoly2
-    {
-        double[][] variants = new double[][]
-        {
-            new double [] {-1, 3, -2},
-            new double [] {0, 0, 10},
-            new double [] {1, -3, 0.5}
-        };
-
-        Tuple<double, double>[] ranges = new Tuple<double, double>[]
-        {
-            new Tuple<double, double>(-10, 10), // Symmetric range
-            new Tuple<double, double>(-10, -1),  // Negative range
-            new Tuple<double, double>(1, 10)     // Positive range
-        };
-
-
-        // Variant 0
-
-        [TestMethod]
-        public void Variant0SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[0], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant0NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[0], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant0PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[0], ranges[2]);
-        }
-
-
-        // Variant 1
-
-        [TestMethod]
-        public void Variant1SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant1NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant1PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[2]);
-        }
-
-        // Variant 2
-
-        [TestMethod]
-        public void Variant2SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant2NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant2PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[2]);
-        }
-    }
-
-    [TestClass]
-    public class CubicSplineTestsPoly3
-    {
-        double[][] variants = new double[][]
-        {
-            new double [] {-1, 3, -2, 4},
-            new double [] {0, 0, 10, -1},
-            new double [] {1, -3, 0.5, -0.7}
-        };
-
-        Tuple<double, double>[] ranges = new Tuple<double, double>[]
-        {
-            new Tuple<double, double>(-100, 100), // Symmetric range
-            new Tuple<double, double>(-100, -1),  // Negative range
-            new Tuple<double, double>(1, 100)     // Positive range
-        };
-
-
-        // Variant 0
-
-        [TestMethod]
-        public void Variant0SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[0], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant0NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[0], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant0PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[0], ranges[2]);
-        }
-
-
-        // Variant 1
-
-        [TestMethod]
-        public void Variant1SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant1NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant1PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[1], ranges[2]);
-        }
-
-        // Variant 2
-
-        [TestMethod]
-        public void Variant2SymmetricRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[0]);
-        }
-
-        [TestMethod]
-        public void Variant2NegativecRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[1]);
-        }
-
-        [TestMethod]
-        public void Variant2PositiveRange()
-        {
-            Utils.TestSinglePoly(variants[2], ranges[2]);
-        }
     }
 }
