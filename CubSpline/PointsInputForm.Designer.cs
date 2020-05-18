@@ -66,7 +66,7 @@
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(115, 31);
             this.cancel.TabIndex = 1;
-            this.cancel.Text = "Cancel";
+            this.cancel.Text = "Отменить";
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
@@ -76,7 +76,7 @@
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(124, 31);
             this.ok.TabIndex = 2;
-            this.ok.Text = "Ok";
+            this.ok.Text = "Подтвердить";
             this.ok.UseVisualStyleBackColor = true;
             this.ok.Click += new System.EventHandler(this.okButton_Click);
             // 
@@ -93,8 +93,8 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.fileToolStripMenuItem.Text = "Из файла";
             this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
             // PointsInputForm
@@ -108,7 +108,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "PointsInputForm";
-            this.Text = "Input data";
+            this.Text = "Ввести/Редактировать данные";
             this.Load += new System.EventHandler(this.PointsInputForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
