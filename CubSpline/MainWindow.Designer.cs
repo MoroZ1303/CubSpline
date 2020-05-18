@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApp1
+﻿namespace CubicSplineApp
 {
     partial class MainWindow
     {

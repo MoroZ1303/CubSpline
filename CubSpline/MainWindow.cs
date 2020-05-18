@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace WindowsFormsApp1
+namespace CubicSplineApp
 {
     public partial class MainWindow : Form
     {
