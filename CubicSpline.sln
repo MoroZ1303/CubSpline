@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inputs", "Inputs", "{46D2DC
 		input1.txt = input1.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{C3623A81-1AB2-4DC2-B1B0-F273F8C57E11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{2FD93C86-BF1D-4590-BCFE-A27153938215}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FD93C86-BF1D-4590-BCFE-A27153938215}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FD93C86-BF1D-4590-BCFE-A27153938215}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3623A81-1AB2-4DC2-B1B0-F273F8C57E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3623A81-1AB2-4DC2-B1B0-F273F8C57E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3623A81-1AB2-4DC2-B1B0-F273F8C57E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3623A81-1AB2-4DC2-B1B0-F273F8C57E11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
