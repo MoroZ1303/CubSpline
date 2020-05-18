@@ -17,12 +17,12 @@ namespace WindowsFormsApp1
 
         private void PointsInputForm_Load(object sender, EventArgs e)
         {
-            dataGridView1.CellValidating += GridViewCellValidating;
-            dataGridView1.CellEndEdit += GridViewCellEndEdit;
-            dataGridView1.Rows.Clear();
+            dataGridView.CellValidating += GridViewCellValidating;
+            dataGridView.CellEndEdit += GridViewCellEndEdit;
+            dataGridView.Rows.Clear();
             foreach (var p in points)
             {
-                dataGridView1.Rows.Add(new string[] { p.Item1.ToString(), p.Item2.ToString() });
+                dataGridView.Rows.Add(new string[] { p.Item1.ToString(), p.Item2.ToString() });
             }
         }
 
@@ -39,8 +39,8 @@ namespace WindowsFormsApp1
 
         private bool isCellValid(int row, int col, out string errMsg)
         {
-            string headerText = dataGridView1.Columns[col].HeaderText;
-            string value = dataGridView1.Rows[row].Cells[col].FormattedValue.ToString();
+            string headerText = dataGridView.Columns[col].HeaderText;
+            string value = dataGridView.Rows[row].Cells[col].FormattedValue.ToString();
 
             // Confirm that the cell is not empty.
             if (string.IsNullOrEmpty(value))
@@ -71,26 +71,26 @@ namespace WindowsFormsApp1
             string errMsg;
             bool valid = isCellValid(row, col, out errMsg);
             if (setErrMsg)
-                dataGridView1.Rows[row].ErrorText = errMsg;
+                dataGridView.Rows[row].ErrorText = errMsg;
             else
-                dataGridView1.Rows[row].ErrorText = String.Empty;
+                dataGridView.Rows[row].ErrorText = String.Empty;
             return valid;
 
         }
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.RowCount < 3)
+            if (dataGridView.RowCount < 3)
             {
-                dataGridView1.Rows[0].ErrorText = "At least 2 " +
+                dataGridView.Rows[0].ErrorText = "At least 2 " +
                     "points should be provided";
                 return;
             }
 
             bool valid = true;
-            for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+            for (int i = 0; i < dataGridView.RowCount - 1; i++)
             {
-                dataGridView1.Rows[i].ErrorText = String.Empty;
+                dataGridView.Rows[i].ErrorText = String.Empty;
                 valid = valid && isCellValid(i, 0);
                 valid = valid && isCellValid(i, 1);
             }
@@ -101,10 +101,10 @@ namespace WindowsFormsApp1
             List<Tuple<double, double>> newPoints = new List<Tuple<double, double>>();
             HashSet<double> xSet = new HashSet<double>();
 
-            for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+            for (int i = 0; i < dataGridView.RowCount - 1; i++)
             {
-                string xValue = dataGridView1.Rows[i].Cells[0].FormattedValue.ToString();
-                string yValue = dataGridView1.Rows[i].Cells[1].FormattedValue.ToString();
+                string xValue = dataGridView.Rows[i].Cells[0].FormattedValue.ToString();
+                string yValue = dataGridView.Rows[i].Cells[1].FormattedValue.ToString();
 
                 double x = Double.Parse(xValue);
                 double y = Double.Parse(yValue);
@@ -112,7 +112,7 @@ namespace WindowsFormsApp1
                 if (xSet.Contains(x))
                 {
                     valid = false;
-                    dataGridView1.Rows[i].ErrorText = "Duplicated X are not allowed";
+                    dataGridView.Rows[i].ErrorText = "Duplicated X are not allowed";
                 }
 
                 xSet.Add(x);
@@ -159,10 +159,10 @@ namespace WindowsFormsApp1
             {
                 try
                 {
-                    dataGridView1.Rows.Clear();
+                    dataGridView.Rows.Clear();
                     foreach(var p in Data.Utils.getPointsFromFile(openFileDialog.OpenFile()))
                     {
-                        dataGridView1.Rows.Add(new string[] { p.getX().ToString(), p.getY().ToString() });
+                        dataGridView.Rows.Add(new string[] { p.getX().ToString(), p.getY().ToString() });
                     }
                 }
                 catch (Exception ex)
