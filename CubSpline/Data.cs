@@ -8,8 +8,6 @@ using WindowsFormsApp1;
 
 namespace Data
 {
-
-
     public class Point
     {
         double x;
@@ -217,8 +215,8 @@ namespace Data
             {
                 double y = (points[i + 2].getY() - 2 * points[i].getY() + points[i - 2].getY());
                 double t = (points[i + 2].getX() - points[i].getX());
-                double dx2 = y / (t*t);
-                res[i-2] = new Point(points[i].getX(), dx2);
+                double dx2 = y / (t * t);
+                res[i - 2] = new Point(points[i].getX(), dx2);
             }
             return res;
         }
