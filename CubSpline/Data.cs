@@ -474,11 +474,13 @@ namespace Data
     class LeastSquares: InterpolationBase
     {
         private int order;
+        private int N;
         private Polynomial polynomial;
         public LeastSquares(Point[] points, int order) : base(points)
         {
-            double[] c = new double[order * 2];
-            for (int m = 0; m < order * 2; m++)
+            N = order + 1;
+            double[] c = new double[N * 2];
+            for (int m = 0; m < N * 2; m++)
             {
                 double t = 0;
                 for (int i = 0; i < NPoints; i++)
@@ -487,18 +489,18 @@ namespace Data
                 }
                 c[m] = t;
             }
-            Matrix<double> A = Matrix<double>.Build.Dense(order, order);
+            Matrix<double> A = Matrix<double>.Build.Dense(N, N);
 
-            for (int j = 0; j < order; j++)
+            for (int j = 0; j < N; j++)
             {
-                for (int i = 0; i < order; i++)
+                for (int i = 0; i < N; i++)
                 {
                     A[j, i] = c[j + i];
                 }
             }
 
-            Vector<double> d = Vector<double>.Build.Dense(order);
-            for (int k = 0; k < order; k++)
+            Vector<double> d = Vector<double>.Build.Dense(N);
+            for (int k = 0; k < N; k++)
             {
                 double t = 0;
                 for (int i = 0; i < NPoints; i++)

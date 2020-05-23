@@ -17,6 +17,7 @@ namespace WindowsFormsApp1
         public MainWindow()
         {
             InitializeComponent();
+            leastSquaresOrderSelection.SelectedItem = "3";
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
