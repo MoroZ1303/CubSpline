@@ -1,10 +1,14 @@
 ﻿
+using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using WindowsFormsApp1;
+
 
 namespace Data
 {
@@ -217,8 +221,8 @@ namespace Data
             {
                 double y = (points[i + 2].getY() - 2 * points[i].getY() + points[i - 2].getY());
                 double t = (points[i + 2].getX() - points[i].getX());
-                double dx2 = y / (t*t);
-                res[i-2] = new Point(points[i].getX(), dx2);
+                double dx2 = y / (t * t);
+                res[i - 2] = new Point(points[i].getX(), dx2);
             }
             return res;
         }
@@ -346,4 +350,171 @@ namespace Data
         }
     }
 
+    abstract class InterpolationBase
+    {
+        protected double start;
+        protected double end;
+        protected Point[] funcTable;
+        protected int NPoints
+        {
+            get
+            {
+                return funcTable.Length;
+            }
+        }
+
+        protected InterpolationBase(Point[] funcTable)
+        {
+
+            // Исключаем повторяющуеся точки
+            Dictionary<double, double> dict = new Dictionary<double, double>();
+            for (int i = 0; i < funcTable.Length; i++)
+            {
+                if (dict.ContainsKey(funcTable[i].getX()))
+                {
+                    // Проверяем если точка дубликат одной из обработаных
+                    // Если дубликат то пропускаем
+                    if (dict[funcTable[i].getX()] == funcTable[i].getY())
+                        continue;
+
+                    // Для одного и того же X существует 2 точки с различными Y 
+                    throw new Exception();
+                }
+                // Добавляем точку в словарь
+                dict[funcTable[i].getX()] = funcTable[i].getY();
+            }
+
+            // Преобразуем словарь в список и сортируем по убыванию X
+            List<Point> sorted = dict.Select(x => new Point(x.Key, x.Value)).OrderBy(p => p.getX()).ToList();
+
+            // Преобразуем список в массив
+            this.funcTable = sorted.ToArray();
+            start = this.funcTable[0].getX();
+            end = this.funcTable[this.funcTable.Length - 1].getX();
+        }
+
+        public Point[] GetPoints(int numberOfPoints = 100)
+        {
+            double step = (end - start) / numberOfPoints;
+            Point[] res = new Point[numberOfPoints];
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                double x = start + i * step;
+                if (i == numberOfPoints - 1)
+                    x = end;
+                double y = f(x);
+                res[i] = new Point(x, y);
+            }
+            return res;
+        }
+
+        abstract public double f(double x);
+
+    }
+
+    class LagrangeInterpolation : InterpolationBase
+    {
+        public LagrangeInterpolation(Point[] ft) : base(ft)
+        {
+        }
+
+        double BasePolynomialValue(double x, int n)
+        {
+            double res = 1;
+            for (int i = 0; i < funcTable.Length; i++)
+            {
+                if (i == n)
+                    continue;
+                res *= (x - funcTable[i].getX()) / (funcTable[i].getX() - funcTable[n].getX());
+            }
+            return res;
+        }
+
+        public override double f(double x)
+        {
+            double res = 0;
+            for (int i = 0; i < funcTable.Length; i++)
+            {
+                res += funcTable[i].getY() * BasePolynomialValue(x, i);
+            }
+            return res;
+        }
+    }
+
+    class NewtonInterpolation : InterpolationBase
+    {
+        private double[] diffs;
+        public NewtonInterpolation(Point[] ft) : base(ft)
+        {
+            diffs = funcTable.Select(pt => pt.getY()).ToArray();
+            for (int j = 1; j < NPoints; j++)
+            {
+                for(int i = NPoints-1; i >= j; i--)
+                {
+                    double dx = funcTable[i].getX() - funcTable[i - j].getX();
+                    double df = diffs[i] - diffs[i - 1];
+                    diffs[i] = df / dx;
+                }
+            }
+        }
+
+        public override double f(double x)
+        {
+            double res = 0;
+            double pValue = 1;
+            for (int i = 0; i < NPoints; i++)
+            {
+                res += diffs[i] * pValue;
+                pValue *= (x - funcTable[i].getX());
+            }
+            return res;
+        }
+    }
+
+    class LeastSquares: InterpolationBase
+    {
+        private int order;
+        private Polynomial polynomial;
+        public LeastSquares(Point[] points, int order) : base(points)
+        {
+            double[] c = new double[order * 2];
+            for (int m = 0; m < order * 2; m++)
+            {
+                double t = 0;
+                for (int i = 0; i < NPoints; i++)
+                {
+                    t += Math.Pow(funcTable[i].getX(), m);
+                }
+                c[m] = t;
+            }
+            Matrix<double> A = Matrix<double>.Build.Dense(order, order);
+
+            for (int j = 0; j < order; j++)
+            {
+                for (int i = 0; i < order; i++)
+                {
+                    A[j, i] = c[j + i];
+                }
+            }
+
+            Vector<double> d = Vector<double>.Build.Dense(order);
+            for (int k = 0; k < order; k++)
+            {
+                double t = 0;
+                for (int i = 0; i < NPoints; i++)
+                {
+                    t += funcTable[i].getY() * Math.Pow(funcTable[i].getX(), k);
+                }
+                d[k] = t;
+            }
+
+            Vector<double> coeffs = A.Solve(d);
+            polynomial = new Polynomial(coeffs.AsArray());
+        }
+
+        public override double f(double x)
+        {
+            return polynomial.f(x);
+        }
+    }
 }

@@ -10,6 +10,7 @@ namespace WindowsFormsApp1
     {
         private PointsInputForm inputDataForm = new PointsInputForm();
         private EnterPolynomialForm polynomialInput = new EnterPolynomialForm();
+        private Data.Point[] inputPoints;
 
         OpenFileDialog openFileDialogue = new OpenFileDialog();
 
@@ -37,25 +38,40 @@ namespace WindowsFormsApp1
 
             if (inputDataForm.ShowDialog(this) == DialogResult.OK)
             {
-                Data.Point[] points = inputDataForm.GetPoints();
+                inputPoints = inputDataForm.GetPoints();
 
-                updateChartSeries("points", points);
+                updateChartSeries("points", inputPoints);
 
-                Data.CubicSpline spline = new Data.CubicSpline(points);
-                Data.Point[] splinePoints = spline.getPoints();
-                updateChartSeries("spline", splinePoints);
+                Data.LagrangeInterpolation lagrange = new Data.LagrangeInterpolation(inputPoints);
+                Data.Point[] lagrangePoints = lagrange.GetPoints();
+                updateChartSeries("Lagrange", lagrangePoints);
 
-                Data.FirstDerivative firstDerivative = new Data.FirstDerivative(spline.getPoints());
-                updateChartSeries("firstDerivative", firstDerivative.GetPoints()).Enabled = false;
-                showFirstDerivative.Checked = false;
+                Data.NewtonInterpolation newton = new Data.NewtonInterpolation(inputPoints);
+                updateChartSeries("Newton", newton.GetPoints()).Enabled = false;
+                showNewton.Checked = false;
 
-                Data.SecondDerivative secondDerivative = new Data.SecondDerivative(spline.getPoints());
-                updateChartSeries("secondDerivative", secondDerivative.GetPoints()).Enabled = false;
-                showSecondDerivative.Checked = false;
+                updateLeastSqaresSeries(false);
                 chart1.ChartAreas[0].AxisX.RoundAxisValues();
             }
+        }
 
+        private void updateLeastSqaresSeries(bool enabled)
+        {
+            int order;
+            if (leastSquaresOrderSelection.SelectedItem == null)
+                return;
 
+            if (!Int32.TryParse(leastSquaresOrderSelection.SelectedItem.ToString(), out order))
+                return;
+
+            if (inputPoints == null)
+                return;
+
+            Data.LeastSquares leastSquares = new Data.LeastSquares(inputPoints, order);
+            updateChartSeries("leastSquares", leastSquares.GetPoints()).Enabled = enabled;
+            showLeastSquares.Checked = enabled;
+            if (enabled)
+                chart1.ResetAutoValues();
         }
 
         private void showPolynomial_CheckedChanged(object sender, EventArgs e)
@@ -85,27 +101,32 @@ namespace WindowsFormsApp1
 
         }
 
-        private void showSpline_CheckedChanged(object sender, EventArgs e)
+        private void showLagrange_CheckedChanged(object sender, EventArgs e)
         {
-            Series series = chart1.Series.FindByName("spline");
-            series.Enabled = showSpline.Checked;
+            Series series = chart1.Series.FindByName("Lagrange");
+            series.Enabled = showLagrange.Checked;
             chart1.ChartAreas[0].AxisX.RoundAxisValues();
             chart1.ResetAutoValues();
         }
 
-        private void showFirstDerivative_CheckedChanged(object sender, EventArgs e)
+        private void showNewton_CheckedChanged(object sender, EventArgs e)
         {
-            Series series = chart1.Series.FindByName("firstDerivative");
-            series.Enabled = showFirstDerivative.Checked;
+            Series series = chart1.Series.FindByName("Newton");
+            series.Enabled = showNewton.Checked;
             chart1.ChartAreas[0].AxisX.RoundAxisValues();
             chart1.ResetAutoValues();
         }
 
-        private void showSecondDerivative_CheckedChanged(object sender, EventArgs e)
+        private void showLeastSquares_CheckedChanged(object sender, EventArgs e)
         {
-            Series series = chart1.Series.FindByName("secondDerivative");
-            series.Enabled = showSecondDerivative.Checked;
+            Series series = chart1.Series.FindByName("leastSquares");
+            series.Enabled = showLeastSquares.Checked;
             chart1.ResetAutoValues();
+        }
+
+        private void leastSquaresOrderSelection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateLeastSqaresSeries(true);
         }
     }
 }

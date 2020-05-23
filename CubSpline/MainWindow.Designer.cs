@@ -42,9 +42,11 @@
             this.enterPolynomialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.showPolynomial = new System.Windows.Forms.CheckBox();
-            this.showFirstDerivative = new System.Windows.Forms.CheckBox();
-            this.showSecondDerivative = new System.Windows.Forms.CheckBox();
-            this.showSpline = new System.Windows.Forms.CheckBox();
+            this.showNewton = new System.Windows.Forms.CheckBox();
+            this.showLeastSquares = new System.Windows.Forms.CheckBox();
+            this.showLagrange = new System.Windows.Forms.CheckBox();
+            this.leastSquaresOrderSelection = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
@@ -71,14 +73,14 @@
             // Manual_menu_item
             // 
             this.Manual_menu_item.Name = "Manual_menu_item";
-            this.Manual_menu_item.Size = new System.Drawing.Size(180, 22);
+            this.Manual_menu_item.Size = new System.Drawing.Size(164, 22);
             this.Manual_menu_item.Text = "Enter Points";
             this.Manual_menu_item.Click += new System.EventHandler(this.Manual_menu_item_Click);
             // 
             // enterPolynomialToolStripMenuItem
             // 
             this.enterPolynomialToolStripMenuItem.Name = "enterPolynomialToolStripMenuItem";
-            this.enterPolynomialToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.enterPolynomialToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.enterPolynomialToolStripMenuItem.Text = "Enter Polynomial";
             this.enterPolynomialToolStripMenuItem.Click += new System.EventHandler(this.enterPolynomialToolStripMenuItem_Click);
             // 
@@ -108,7 +110,7 @@
             series2.Enabled = false;
             series2.Legend = "Legend1";
             series2.LegendText = "spline";
-            series2.Name = "spline";
+            series2.Name = "Lagrange";
             series3.BorderWidth = 2;
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -116,7 +118,7 @@
             series3.Enabled = false;
             series3.Legend = "Legend1";
             series3.LegendText = "f\'(x)";
-            series3.Name = "firstDerivative";
+            series3.Name = "Newton";
             series4.BorderWidth = 2;
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -124,7 +126,7 @@
             series4.Enabled = false;
             series4.Legend = "Legend1";
             series4.LegendText = "f\'\'(x)";
-            series4.Name = "secondDerivative";
+            series4.Name = "leastSquares";
             series5.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
             series5.BorderWidth = 3;
             series5.ChartArea = "ChartArea1";
@@ -154,47 +156,76 @@
             this.showPolynomial.UseVisualStyleBackColor = true;
             this.showPolynomial.CheckedChanged += new System.EventHandler(this.showPolynomial_CheckedChanged);
             // 
-            // showFirstDerivative
+            // showNewton
             // 
-            this.showFirstDerivative.AutoSize = true;
-            this.showFirstDerivative.Location = new System.Drawing.Point(949, 88);
-            this.showFirstDerivative.Name = "showFirstDerivative";
-            this.showFirstDerivative.Size = new System.Drawing.Size(72, 17);
-            this.showFirstDerivative.TabIndex = 10;
-            this.showFirstDerivative.Text = "Show f\'(x)";
-            this.showFirstDerivative.UseVisualStyleBackColor = true;
-            this.showFirstDerivative.CheckedChanged += new System.EventHandler(this.showFirstDerivative_CheckedChanged);
+            this.showNewton.AutoSize = true;
+            this.showNewton.Location = new System.Drawing.Point(949, 88);
+            this.showNewton.Name = "showNewton";
+            this.showNewton.Size = new System.Drawing.Size(93, 17);
+            this.showNewton.TabIndex = 10;
+            this.showNewton.Text = "Show Newton";
+            this.showNewton.UseVisualStyleBackColor = true;
+            this.showNewton.CheckedChanged += new System.EventHandler(this.showNewton_CheckedChanged);
             // 
-            // showSecondDerivative
+            // showLeastSquares
             // 
-            this.showSecondDerivative.AutoSize = true;
-            this.showSecondDerivative.Location = new System.Drawing.Point(949, 111);
-            this.showSecondDerivative.Name = "showSecondDerivative";
-            this.showSecondDerivative.Size = new System.Drawing.Size(74, 17);
-            this.showSecondDerivative.TabIndex = 10;
-            this.showSecondDerivative.Text = "Show f\'\'(x)";
-            this.showSecondDerivative.UseVisualStyleBackColor = true;
-            this.showSecondDerivative.CheckedChanged += new System.EventHandler(this.showSecondDerivative_CheckedChanged);
+            this.showLeastSquares.AutoSize = true;
+            this.showLeastSquares.Location = new System.Drawing.Point(949, 111);
+            this.showLeastSquares.Name = "showLeastSquares";
+            this.showLeastSquares.Size = new System.Drawing.Size(124, 17);
+            this.showLeastSquares.TabIndex = 10;
+            this.showLeastSquares.Text = "Show Least Squares";
+            this.showLeastSquares.UseVisualStyleBackColor = true;
+            this.showLeastSquares.CheckedChanged += new System.EventHandler(this.showLeastSquares_CheckedChanged);
             // 
-            // showSpline
+            // showLagrange
             // 
-            this.showSpline.AutoSize = true;
-            this.showSpline.Location = new System.Drawing.Point(949, 65);
-            this.showSpline.Name = "showSpline";
-            this.showSpline.Size = new System.Drawing.Size(83, 17);
-            this.showSpline.TabIndex = 10;
-            this.showSpline.Text = "Show spline";
-            this.showSpline.UseVisualStyleBackColor = true;
-            this.showSpline.CheckedChanged += new System.EventHandler(this.showSpline_CheckedChanged);
+            this.showLagrange.AutoSize = true;
+            this.showLagrange.Location = new System.Drawing.Point(949, 65);
+            this.showLagrange.Name = "showLagrange";
+            this.showLagrange.Size = new System.Drawing.Size(101, 17);
+            this.showLagrange.TabIndex = 10;
+            this.showLagrange.Text = "Show Lagrange";
+            this.showLagrange.UseVisualStyleBackColor = true;
+            this.showLagrange.CheckedChanged += new System.EventHandler(this.showLagrange_CheckedChanged);
+            // 
+            // leastSquaresOrderSelection
+            // 
+            this.leastSquaresOrderSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.leastSquaresOrderSelection.FormattingEnabled = true;
+            this.leastSquaresOrderSelection.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7"});
+            this.leastSquaresOrderSelection.Location = new System.Drawing.Point(949, 175);
+            this.leastSquaresOrderSelection.Name = "leastSquaresOrderSelection";
+            this.leastSquaresOrderSelection.Size = new System.Drawing.Size(63, 21);
+            this.leastSquaresOrderSelection.TabIndex = 11;
+            this.leastSquaresOrderSelection.SelectedIndexChanged += new System.EventHandler(this.leastSquaresOrderSelection_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(946, 159);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(125, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Least Squares Poly order";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1074, 601);
-            this.Controls.Add(this.showSecondDerivative);
-            this.Controls.Add(this.showSpline);
-            this.Controls.Add(this.showFirstDerivative);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.leastSquaresOrderSelection);
+            this.Controls.Add(this.showLeastSquares);
+            this.Controls.Add(this.showLagrange);
+            this.Controls.Add(this.showNewton);
             this.Controls.Add(this.showPolynomial);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.menuStrip1);
@@ -218,9 +249,11 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.ToolStripMenuItem enterPolynomialToolStripMenuItem;
         private System.Windows.Forms.CheckBox showPolynomial;
-        private System.Windows.Forms.CheckBox showSpline;
-        private System.Windows.Forms.CheckBox showFirstDerivative;
-        private System.Windows.Forms.CheckBox showSecondDerivative;
+        private System.Windows.Forms.CheckBox showLagrange;
+        private System.Windows.Forms.CheckBox showNewton;
+        private System.Windows.Forms.CheckBox showLeastSquares;
+        private System.Windows.Forms.ComboBox leastSquaresOrderSelection;
+        private System.Windows.Forms.Label label1;
     }
 }
 
