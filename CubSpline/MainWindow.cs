@@ -27,10 +27,10 @@ namespace CubicSplineApp
             }
             return series;
         }
-        private void DataEnterEditMenuItem_Click(object sender, EventArgs e)
+        private void DataEnterEditMenuItem_Click(object sender, EventArgs e )
         {
 
-            if (dataInputForm.ShowDialog(this) == DialogResult.OK)
+            if (dataInputForm.ShowDialog(this) == DialogResult.OK )
             {
                 Data.Point[] points = dataInputForm.GetPoints();
 
