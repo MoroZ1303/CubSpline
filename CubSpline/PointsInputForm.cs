@@ -45,21 +45,21 @@ namespace CubicSplineApp
             // Confirm that the cell is not empty.
             if (string.IsNullOrEmpty(value))
             {
-                errMsg = headerText + " must not be empty";
+                errMsg = headerText + " не должен быть пустым";
                 return false;
             }
 
             double x = 0;
             if (!Double.TryParse(value, out x))
             {
-                errMsg = headerText + " must be floating point";
+                errMsg = headerText + " должно быть число с плавающей точкой";
                 return false;
             }
 
             double y = 0;
             if (!Double.TryParse(value, out y))
             {
-                errMsg = headerText + " must be floating point";
+                errMsg = headerText + " должно быть число с плавающей точкой";
                 return false;
             }
             errMsg = String.Empty;
@@ -80,10 +80,9 @@ namespace CubicSplineApp
 
         private void OkButton_Click(object sender, EventArgs e)
         {
-            if (dataGridView.RowCount < 3)
+            if (dataGridView.RowCount < 5)
             {
-                dataGridView.Rows[0].ErrorText = "At least 2 " +
-                    "points should be provided";
+                dataGridView.Rows[0].ErrorText = "Требуется как минимум 4 точки";
                 return;
             }
 
@@ -112,7 +111,7 @@ namespace CubicSplineApp
                 if (xSet.Contains(x))
                 {
                     valid = false;
-                    dataGridView.Rows[i].ErrorText = "Duplicated X are not allowed";
+                    dataGridView.Rows[i].ErrorText = "Одинаковые значения Х не допустимы";
                 }
 
                 xSet.Add(x);
@@ -167,7 +166,7 @@ namespace CubicSplineApp
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("File " + openFileDialog.FileName + " parse error: " + ex.Message);
+                    MessageBox.Show("Ошибка чтения файла " + openFileDialog.FileName + " : " + ex.Message);
                 }
             }
         }
