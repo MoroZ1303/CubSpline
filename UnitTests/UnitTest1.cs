@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -24,7 +26,7 @@ namespace UnitTests
             Point[] sortedPoints = points.OrderBy(p => p.getX()).ToArray();
 
             // Проверяем что точки функции и сплайна совпадают
-            foreach(Point p in points)
+            foreach (Point p in points)
             {
                 double expected = p.getY();
                 double test = spline.f(p.getX());
@@ -64,7 +66,7 @@ namespace UnitTests
         [TestMethod]
         public void TestPoly()
         {
-            Utils.TestSpline(x => 0.2*x*x + x - 10, 0, 20);
+            Utils.TestSpline(x => 0.2 * x * x + x - 10, 0, 20);
         }
 
         [TestMethod]
@@ -76,11 +78,85 @@ namespace UnitTests
                 double rangeStart = rand.Next(-100, 100);
                 double rangeEnd = rangeStart + rand.Next(10, 100);
 
-                Utils.TestSpline(x => rangeStart + (rangeEnd - rangeStart)*rand.NextDouble(), rangeStart, rangeEnd);
+                Utils.TestSpline(x => rangeStart + (rangeEnd - rangeStart) * rand.NextDouble(), rangeStart, rangeEnd);
             }
 
-            Utils.TestSpline(x => 0.2 * x * x + x - 10, 0, 20);
+
         }
 
     }
+
+    [TestClass]
+    public class TestFileInput
+    {
+        private Point[] readFromStr(string str) 
+        {
+            byte[] byteArr = Encoding.ASCII.GetBytes(str);
+            MemoryStream ms = new MemoryStream(byteArr);
+            return Data.Utils.GetPointsFromFile(ms).ToArray();
+        }
+        [TestMethod]
+        public void InputTest() 
+        {
+            Point[] t = readFromStr("1 2");
+            Assert.AreEqual(1, t.Length);
+            Assert.AreEqual(1, t[0].getX());
+            Assert.AreEqual(2, t[0].getY());
+        }
+        [TestMethod]
+        public void InputTestNegotive()
+        {
+            Point[] t = readFromStr("+1 -2");
+            Assert.AreEqual(1, t.Length);
+            Assert.AreEqual(1, t[0].getX());
+            Assert.AreEqual(-2, t[0].getY());
+        }
+        [TestMethod]
+        public void InputTestDot()
+        {
+            Point[] t = readFromStr("1.123 -2.44");
+            Assert.AreEqual(1, t.Length);
+            Assert.AreEqual(1.123, t[0].getX());
+            Assert.AreEqual(-2.44, t[0].getY());
+        }
+        [TestMethod]
+        public void InputTestExp()
+        {
+            Point[] t = readFromStr("1e+1 1e-2");
+            Assert.AreEqual(1, t.Length);
+            Assert.AreEqual(10, t[0].getX());
+            Assert.AreEqual(0.01, t[0].getY());
+        }
+        [TestMethod]
+        public void InputTestMultyString()
+        {
+            Point[] t = readFromStr("1.123 -2.44\n2 3\n");
+            Assert.AreEqual(2, t.Length);
+            Assert.AreEqual(1.123, t[0].getX());
+            Assert.AreEqual(-2.44, t[0].getY());
+            Assert.AreEqual(2, t[1].getX());
+            Assert.AreEqual(3, t[1].getY());
+        }
+        [TestMethod]
+        public void InputTestEmpty()
+        {
+            Point[] t = readFromStr("");
+            Assert.AreEqual(0, t.Length);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void IncorectInputTest()
+        {
+            Point[] t = readFromStr("1 2 3");
+            
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void IncorectInputTestNan()
+        {
+            Point[] t = readFromStr("1 a");
+        }
+    }
+    
+
 }

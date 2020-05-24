@@ -19,7 +19,7 @@ namespace Data
         public double getX() { return x; }
         public double getY() { return y; }
     }
-    class Utils
+    public class Utils
     {
         public static List<Point> GetPointsFromFile(System.IO.Stream stream)
         {
@@ -31,6 +31,8 @@ namespace Data
                 while ((l = reader.ReadLine()) != null)
                 {
                     string[] parts = l.Trim().Split(new char[] { ' ', '\t' }).Where(t => !String.IsNullOrEmpty(t)).ToArray();
+                    if (parts.Length != 2)
+                        throw new IndexOutOfRangeException("Incorect number of fields: " + l);
                     double x = Double.Parse(parts[0].Trim());
                     double y = Double.Parse(parts[1].Trim());
                     points.Add(new Point(x, y));
