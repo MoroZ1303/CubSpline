@@ -29,10 +29,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.dataStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataEnterEditMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,32 +69,32 @@
             // 
             // chart
             // 
-            chartArea1.AxisX.IsMarginVisible = false;
-            chartArea1.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart.Legends.Add(legend1);
+            chartArea2.AxisX.IsMarginVisible = false;
+            chartArea2.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart.Legends.Add(legend2);
             this.chart.Location = new System.Drawing.Point(23, 42);
             this.chart.Name = "chart";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series1.Legend = "Legend1";
-            series1.LegendText = "точки";
-            series1.MarkerBorderColor = System.Drawing.Color.Black;
-            series1.MarkerSize = 8;
-            series1.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series1.Name = "points";
-            series2.BorderColor = System.Drawing.Color.Transparent;
-            series2.BorderWidth = 2;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            series2.CustomProperties = "LineTension=0.5";
-            series2.Legend = "Legend1";
-            series2.LegendText = "сплайн";
-            series2.Name = "spline";
-            this.chart.Series.Add(series1);
-            this.chart.Series.Add(series2);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series3.Legend = "Legend1";
+            series3.LegendText = "точки";
+            series3.MarkerBorderColor = System.Drawing.Color.Black;
+            series3.MarkerSize = 8;
+            series3.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series3.Name = "points";
+            series4.BorderColor = System.Drawing.Color.Transparent;
+            series4.BorderWidth = 2;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            series4.CustomProperties = "LineTension=0.5";
+            series4.Legend = "Legend1";
+            series4.LegendText = "сплайн";
+            series4.Name = "spline";
+            this.chart.Series.Add(series3);
+            this.chart.Series.Add(series4);
             this.chart.Size = new System.Drawing.Size(902, 506);
             this.chart.TabIndex = 6;
             this.chart.Text = "chart1";
@@ -106,7 +106,9 @@
             this.ClientSize = new System.Drawing.Size(961, 601);
             this.Controls.Add(this.chart);
             this.Controls.Add(this.menuStrip);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip;
+            this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Text = "Интерполятор";
             this.Load += new System.EventHandler(this.MainWindow_Load);

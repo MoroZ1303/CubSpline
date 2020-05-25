@@ -60,32 +60,32 @@
             this.y.HeaderText = "Y";
             this.y.Name = "y";
             // 
-            // cancel
+            // cancelButton
             // 
             this.cancelButton.Location = new System.Drawing.Point(154, 520);
-            this.cancelButton.Name = "cancel";
+            this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(115, 31);
             this.cancelButton.TabIndex = 1;
             this.cancelButton.Text = "Отменить";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
-            // ok
+            // okButton
             // 
             this.okButton.Location = new System.Drawing.Point(24, 520);
-            this.okButton.Name = "ok";
+            this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(124, 31);
             this.okButton.TabIndex = 2;
             this.okButton.Text = "Подтвердить";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
-            // menuStrip1
+            // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip.Name = "menuStrip1";
+            this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(296, 24);
             this.menuStrip.TabIndex = 3;
             this.menuStrip.Text = "menuStrip1";
@@ -106,6 +106,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.menuStrip);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "PointsInputForm";
