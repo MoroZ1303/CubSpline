@@ -1,4 +1,4 @@
-﻿namespace CubicSplineApp
+﻿namespace CSpline
 {
     partial class MainWindow
     {
