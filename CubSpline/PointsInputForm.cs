@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 
-namespace CubicSplineApp
+namespace CSpline
 {
     public partial class PointsInputForm : Form
     {
